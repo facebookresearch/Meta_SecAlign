@@ -1,0 +1,7 @@
+__pycache__
+wandb
+data
+meta-llama*
+*-log
+.cache
+figures

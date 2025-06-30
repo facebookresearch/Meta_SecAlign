@@ -1,0 +1,37 @@
+torchdata
+datasets
+huggingface_hub[hf_transfer]
+safetensors
+kagglehub
+sentencepiece
+tiktoken
+blobfile>=2
+tokenizers
+numpy
+tqdm
+omegaconf
+psutil
+Pillow>=9.4.0
+
+[async_rl]
+torchrl@ git+https://github.com/pytorch/rl@0475cbf64de0cdf5f185a77badaa6eb241c63b0b
+tensordict@ git+https://github.com/pytorch/tensordict@c61d045aaadf6c0625706a3670fc6a741f31f1b0
+ray
+readerwriterlock
+vllm==0.8.4
+wandb
+math-verify[antlr4_9_3]
+
+[dev]
+bitsandbytes>=0.43.0
+comet_ml>=3.44.2
+mlflow
+pre-commit
+pytest==7.4.0
+pytest-cov
+pytest-mock
+pytest-integration
+tensorboard
+urllib3<2.0.0
+wandb
+expecttest
