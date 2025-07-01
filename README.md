@@ -42,7 +42,7 @@ with model-level defense.
 + Results will be logged to ```[model_path]/summary.tsv```
 
 To test AgentDojo, run
-> bash run_agentdojo_secalign.sh [model_path] [defense]
+> bash run_agentdojo_secalign.sh [model_path] [defense] \
 where [defense] can be ```None``` or any pre-defined defense in AgentDojo
 
 # [Optional] SecAlign++ Preference Optimization
