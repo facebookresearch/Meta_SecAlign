@@ -23,7 +23,7 @@ model:
 tokenizer:
   _component_: torchtune.models.llama3.llama3_tokenizer
   path: meta-llama/Llama-3.3-70B-Instruct/original/tokenizer.model
-  max_seq_len: 1024
+  max_seq_len: 2048
 
 checkpointer:
   _component_: torchtune.training.FullModelHFCheckpointer

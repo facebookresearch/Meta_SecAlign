@@ -55,13 +55,11 @@ def generate_preference_dataset(
         self_generated_response=True,  # Whether to use self-generated responses or (bad) ground truth responses
         random_inject_pos=True,  # Randomize the position of the injected prompt
     ):
-    preference_data_path = 'data/preference_' + model_name_or_path.split('_')[0].split('/')[1] + '_dpo_NaiveCompletion'
+    preference_data_path = 'data/preference_' + model_name_or_path.split('/')[1] + '_dpo_NaiveCompletion'
     if random_inject_pos:
         preference_data_path += '_randpos'
     preference_data_path += '_synthetic' if self_generated_response else '_real'
-    preference_data_path += '_' + instruct_dataset
-    print(preference_data_path)
-    exit()
+    preference_data_path += '_' + instruct_dataset + '.json'
     print('Generating', preference_data_path)
     if os.path.exists(preference_data_path):
         print(preference_data_path, 'already exists.')

@@ -32,7 +32,7 @@ model:
 tokenizer:
   _component_: torchtune.models.llama3.llama3_tokenizer
   path: meta-llama/Meta-Llama-3.1-8B-Instruct/original/tokenizer.model
-  max_seq_len: 1024 # higher increases memory
+  max_seq_len: 2048 # higher increases memory
 
 checkpointer:
   _component_: torchtune.training.FullModelHFCheckpointer
@@ -93,5 +93,5 @@ device: cuda
 dtype: bf16
 
 # Memory management
-enable_activation_checkpointing: False  # True reduces memory
+enable_activation_checkpointing: True  # True reduces memory
 enable_activation_offloading: False  # True reduces memory

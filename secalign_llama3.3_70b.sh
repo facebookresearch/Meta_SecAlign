@@ -3,8 +3,8 @@ export DATASET="alpaca"
 export NUM_SAMPLES="-1"
 export RESPONSE="synthetic"
 export ATTACK="NaiveCompletion"
-export LR="1.6e-4"
-export OUTPUT_DIR="meta-llama/${MODEL}_dpo_${ATTACK}_randpos_${RESPONSE}_${DATASET}_ns${NUM_SAMPLES}_bs256_${LR}_maxlength1024"
+export LR="3.2e-4"
+export OUTPUT_DIR="meta-llama/${MODEL}_dpo_${ATTACK}_randpos_${RESPONSE}_${DATASET}_ns${NUM_SAMPLES}_bs256_${LR}_maxlength2048"
 export DATA_FILES="data/preference_${MODEL}_dpo_${ATTACK}_randpos_${RESPONSE}_${DATASET}.json"
 
 tune download meta-llama/Llama-3.3-70B-Instruct \

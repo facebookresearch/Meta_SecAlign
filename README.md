@@ -24,17 +24,21 @@ with model-level defense.
 + Install environment dependencies for evaluation
 > conda env create -n secalign python==3.12 \
 > pip install -r requirements.txt
-+ Install environment dependencies for training (TODO: merge environment if possible)
-> conda env update -f requirements_training.yml \
-> pip install -r requirements_training.txt --no-deps
 + Download dependencies (run with 1 or 4 available GPUs to trigger necessary inference)
 > python setup.py
 + Configure openai dependencies for utility evaluation: create ```data/openai_configs.yaml``` following ```data/openai_configs_examle.yaml```
 + Configure gemini keys in ```data/gemini_configs.yaml```
 > default: \n - client_class: "genai.Client" \n - api_key: "..."
 
-# SecAlign Preference Optimization
-+ TODO
+# SecAlign Preference Optimization (Optional)
++ To train SecAlign models from scratch, first install the conda environment for training
+> conda env create -n secalign_training python==3.12 \
+> conda env update -f requirements_training.yml \
+> pip install -r requirements_training.txt --no-deps
+Then install the custom torchtune package locally from source
+> cd torchtune
+> pip install -e .
++ Run the following script to train the 8B or 70B model: ```bash secalign_llama3.1_8b.sh``` or ```bash secalign_llama3.3_70b.sh```
 
 # Evaluation
 > python run_tests.py -m [model_path] --lora_alpha [lora_alpha]
@@ -52,4 +56,4 @@ with model-level defense.
 # Code Acknowledgements
 The majority of SecAlign is licensed under CC-BY-NC, however portions of the project are available under separate license terms: ... This software and/or data was deposited in the BAIR open research Commons repository in 2025. 
 
-Code from other repos: torchtune (better released without the folder), TaskTracker (setup.py), lm_eval_harness (lm_eval_config), alpaca_eval (glm_winrate.py)
+Code from other repos: torchtune, TaskTracker (setup.py), lm_eval_harness (lm_eval_config), alpaca_eval (glm_winrate.py)

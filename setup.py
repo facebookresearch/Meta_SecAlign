@@ -608,11 +608,11 @@ snapshot_download(repo_id='facebook/Meta-SecAlign-70B', local_dir='meta-llama/Ll
 
 # Generate preference dataset (uncomment to reproduce ablation studies)
 if torch.cuda.device_count() >= 4: 
-    generate_preference_dataset('meta-llama/Llama-3.3-70B-Instruct', instruct_dataset="alpaca", self_generated_response=True, random_inject_pos=True, random_conversation_turn=False)
+    generate_preference_dataset('meta-llama/Llama-3.3-70B-Instruct', instruct_dataset="alpaca", self_generated_response=True, random_inject_pos=True)
     #generate_preference_dataset('meta-llama/Llama-3.1-70B-Instruct', instruct_dataset="alpaca", self_generated_response=True, random_inject_pos=True, random_conversation_turn=False)
 else: print('Skipping Llama-3.3-70B-Instruct preference dataset generation due to insufficient (<4) GPUs.')
 if torch.cuda.device_count():
-    generate_preference_dataset('meta-llama/Llama-3.1-8B-Instruct', instruct_dataset="alpaca", self_generated_response=True, random_inject_pos=True, random_conversation_turn=False)
+    generate_preference_dataset('meta-llama/Llama-3.1-8B-Instruct', instruct_dataset="alpaca", self_generated_response=True, random_inject_pos=True)
     #generate_preference_dataset('meta-llama/Llama-3.1-8B-Instruct', instruct_dataset="alpaca", self_generated_response=True, random_inject_pos=False, random_conversation_turn=False)
     #generate_preference_dataset('meta-llama/Llama-3.1-8B-Instruct', instruct_dataset="alpaca", self_generated_response=False, random_inject_pos=True, random_conversation_turn=False)
     #generate_preference_dataset('meta-llama/Llama-3.1-8B-Instruct', instruct_dataset="alpaca", self_generated_response=False, random_inject_pos=False, random_conversation_turn=False)
