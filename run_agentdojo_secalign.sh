@@ -13,7 +13,7 @@ nohup vllm serve meta-llama/Llama-3.3-70B-Instruct \
     --chat_template $cwd/data/chat_template.jinja \
     --lora-modules meta-llama/Llama-3.3-70B-Instruct-SecAlign=$cwd/${MODEL} > $cwd/agentdojo/runs/${MODEL}/vllm_server.out &
 
-sleep 600
+sleep 600   # wait for the vllm server to spin up, may need to increase if checkpoint loading is slow
 
 cd agentdojo/src
 if [ $DEFENSE == "None" ]; then
