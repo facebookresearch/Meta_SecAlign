@@ -54,15 +54,20 @@ def generate_preference_dataset(
         instruct_dataset="alpaca",  # "alpaca" or "natural"
         self_generated_response=True,  # Whether to use self-generated responses or (bad) ground truth responses
         random_inject_pos=True,  # Randomize the position of the injected prompt
-        random_conversation_turn=False,  # Randomize the order of trusted part and untrusted part
     ):
-    preference_data_path = 'data/preference_' + model_name_or_path.split('_')[0].split('/')[1] + '_randpos' + str(int(random_inject_pos)) + '_randturn' + str(int(random_conversation_turn)) + '_selflabel' + str(int(self_generated_response)) + '_' + instruct_dataset + ".json"
+    preference_data_path = 'data/preference_' + model_name_or_path.split('_')[0].split('/')[1] + '_dpo_NaiveCompletion'
+    if random_inject_pos:
+        preference_data_path += '_randpos'
+    preference_data_path += '_synthetic' if self_generated_response else '_real'
+    preference_data_path += '_' + instruct_dataset
+    print(preference_data_path)
+    exit()
     print('Generating', preference_data_path)
     if os.path.exists(preference_data_path):
         print(preference_data_path, 'already exists.')
         return load_dataset('json', data_files=preference_data_path, split='train')
 
-    if instruct_dataset == "alpaca":    clean_data = load_dataset("yahma/alpaca-cleaned")['train'] #jload('data/alpaca_data_cleaned.json')
+    if instruct_dataset == "alpaca":    clean_data = load_dataset("yahma/alpaca-cleaned")['train']
     elif instruct_dataset == "natural": clean_data = load_dataset("Muennighoff/natural-instructions", data_dir='train')['train']
     else: raise ValueError("Unknown instruction dataset " + instruct_dataset)
     
@@ -70,9 +75,9 @@ def generate_preference_dataset(
     preference_data = []
     ref_inst_resp = {}
     for ref_sample in injection_data: ref_inst_resp[ref_sample['instruction']] = ref_sample['output']
-    tokenizer = transformers.AutoTokenizer.from_pretrained('data') #model_name_or_path)
+    tokenizer = transformers.AutoTokenizer.from_pretrained('data')
 
-    num_samples = len(clean_data) if instruct_dataset == "alpaca" else 60000 #100000
+    num_samples = len(clean_data) if instruct_dataset == "alpaca" else 60000
     order = np.random.permutation(num_samples)
     for i in range(num_samples):
         sample = clean_data[int(order[i])]
@@ -95,7 +100,6 @@ def generate_preference_dataset(
             {"role": "user",  "content": current_sample['instruction']},
             {"role": "input", "content": current_sample['input']},
         ]
-        if random_conversation_turn and np.random.rand() < 0.5: messages = [messages[1], messages[0]]
         if self_generated_response:
             preference_data.append({
                 'prompt': tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True),
