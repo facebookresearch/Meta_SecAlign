@@ -34,16 +34,6 @@ with model-level defense.
 # Demo
 + You can run ```demo.py``` to see the SecAlign defense in action. Try to come up with creative injected prompts to break our defense!
 
-# [Optional] SecAlign Preference Optimization
-+ To train SecAlign models from scratch, first install the conda environment for training (TODO: merge with evaluation environment)
-> conda create -n secalign_training python==3.12 \
-> conda env update -f requirements_training.yml \
-> pip install -r requirements_training.txt --no-deps
-+ Then install the custom torchtune package locally from source (TODO: restructure preference dataset to work with torchtune without modification)
-> cd torchtune \
-> pip install -e .
-+ Run the following script to train the 8B or 70B model: ```bash secalign_llama3.1_8b.sh``` or ```bash secalign_llama3.3_70b.sh```
-
 # Evaluation
 > python run_tests.py -m [model_path] --lora_alpha [lora_alpha]
 + ```model_path``` is the path to the tested model, e.g., ```meta-llama/Llama-3.1-8B-Instruct_SecAlign, meta-llama/Llama-3.3-70B-Instruct_SecAlign, gpt-4o-mini, gpt-4o, gemini-2.0-flash, gemini-2.5-flash```.
@@ -54,7 +44,15 @@ with model-level defense.
 > bash run_agentdojo_secalign.sh [model_path] [defense]
 + where [defense] can be ```None``` or any pre-defined defense in AgentDojo
 
-
+# [Optional] SecAlign++ Preference Optimization
++ To fine-tune your own model using SecAlign++, first install the conda environment for training (TODO: merge with evaluation environment)
+> conda create -n secalign_training python==3.12 \
+> conda env update -f requirements_training.yml \
+> pip install -r requirements_training.txt --no-deps
++ Then install the custom torchtune package locally from source (TODO: restructure preference dataset to work with torchtune without modification)
+> cd torchtune \
+> pip install -e .
++ Run the following script to train the 8B or 70B model: ```bash secalign_llama3.1_8b.sh``` or ```bash secalign_llama3.3_70b.sh```
 
 # Code Acknowledgements
 The majority of Meta SecAlign is licensed under CC-BY-NC, however portions of the project are available under separate license terms: [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) is licensed under Apache 2.0, [AgentDojo](https://github.com/ethz-spylab/agentdojo), [TaskTracker](https://github.com/microsoft/TaskTracker) and [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) are licensed under MIT, and [torchtune](https://github.com/pytorch/torchtune) is licensed under BSD 3. This software and/or data was deposited in the BAIR Open Research Commons repository in 2025.
