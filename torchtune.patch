@@ -1,8 +1,7 @@
-Submodule torchtune contains modified content
-diff --git a/torchtune/torchtune/datasets/_preference.py b/torchtune/torchtune/datasets/_preference.py
+diff --git a/torchtune/datasets/_preference.py b/torchtune/datasets/_preference.py
 index 6b7c6294..059d46a7 100644
---- a/torchtune/torchtune/datasets/_preference.py
-+++ b/torchtune/torchtune/datasets/_preference.py
+--- a/torchtune/datasets/_preference.py
++++ b/torchtune/datasets/_preference.py
 @@ -129,21 +129,25 @@ class PreferenceDataset(Dataset):
          return self._prepare_sample(sample)
  

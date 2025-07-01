@@ -6,9 +6,11 @@
 cp agentdojo.patch agentdojo/
 cd agentdojo
 git apply agentdojo.patch
+rm agentdojo.patch
 cd ..
 
 cp torchtune.patch torchtune/
 cd torchtune
 git apply torchtune.patch
+rm torchtune.patch
 cd ..
