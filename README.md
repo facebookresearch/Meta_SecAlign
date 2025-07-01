@@ -30,12 +30,12 @@ with model-level defense.
 + Configure gemini keys in ```data/gemini_configs.yaml```
 > default: \n - client_class: "genai.Client" \n - api_key: "..."
 
-# SecAlign Preference Optimization (Optional)
-+ To train SecAlign models from scratch, first install the conda environment for training
+# [Optional] SecAlign Preference Optimization
++ To train SecAlign models from scratch, first install the conda environment for training (TODO: merge with evaluation environment)
 > conda env create -n secalign_training python==3.12 \
 > conda env update -f requirements_training.yml \
 > pip install -r requirements_training.txt --no-deps
-Then install the custom torchtune package locally from source
++ Then install the custom torchtune package locally from source (TODO: restructure preference dataset to work with torchtune without modification)
 > cd torchtune
 > pip install -e .
 + Run the following script to train the 8B or 70B model: ```bash secalign_llama3.1_8b.sh``` or ```bash secalign_llama3.3_70b.sh```
@@ -54,6 +54,6 @@ Then install the custom torchtune package locally from source
 
 
 # Code Acknowledgements
-The majority of SecAlign is licensed under CC-BY-NC, however portions of the project are available under separate license terms: ... This software and/or data was deposited in the BAIR open research Commons repository in 2025. 
+The majority of Meta SecAlign is licensed under CC-BY-NC, however portions of the project are available under separate license terms: [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) is licensed under Apache 2.0, [AgentDojo](https://github.com/ethz-spylab/agentdojo), [TaskTracker](https://github.com/microsoft/TaskTracker) and [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) are licensed under MIT, and [torchtune](https://github.com/pytorch/torchtune) is licensed under BSD 3. This software and/or data was deposited in the BAIR Open Research Commons repository in 2025.
 
-Code from other repos: torchtune, TaskTracker (setup.py), lm_eval_harness (lm_eval_config), alpaca_eval (glm_winrate.py)
+Code from other repos: TaskTracker (setup.py), lm_eval_harness (lm_eval_config), alpaca_eval (glm_winrate.py).
