@@ -36,7 +36,7 @@ with model-level defense.
 > conda env update -f requirements_training.yml \
 > pip install -r requirements_training.txt --no-deps
 + Then install the custom torchtune package locally from source (TODO: restructure preference dataset to work with torchtune without modification)
-> cd torchtune
+> cd torchtune \
 > pip install -e .
 + Run the following script to train the 8B or 70B model: ```bash secalign_llama3.1_8b.sh``` or ```bash secalign_llama3.3_70b.sh```
 
