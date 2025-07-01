@@ -19,8 +19,8 @@ with model-level defense.
 
 # Environment
 + Hardware requirements. 8B: 4 80G A100s for training, 1 16G GPU for evaluation. 70B: 8 141GB H200s for training, 4 (recommending 8 for efficiency) 80G A100s for evaluation.
-> git clone https://github.com/facebookresearch/SecAlign \
-> cd SecAlign
+> git clone https://github.com/facebookresearch/Meta_SecAlign \
+> cd Meta_SecAlign
 + Install environment dependencies for evaluation
 > conda create -n secalign python==3.12 \
 > conda activate secalign \
@@ -48,7 +48,7 @@ with model-level defense.
 > python run_tests.py -m [model_path] --lora_alpha [lora_alpha]
 + ```model_path``` is the path to the tested model, e.g., ```meta-llama/Llama-3.1-8B-Instruct_SecAlign, meta-llama/Llama-3.3-70B-Instruct_SecAlign, gpt-4o-mini, gpt-4o, gemini-2.0-flash, gemini-2.5-flash```.
 + ```lora_alpha``` is default to 8 (as in training). Specify it to different values to trade-off utility (```--lora_alpha 0```) and security (```--lora_alpha 8```).
-+ This command tests [AlpacaEval2 utility benchmark](https://huggingface.co/datasets/tatsu-lab/alpaca_farm), [AlpacaFarm security benchmark](https://arxiv.org/pdf/2402.06363), [lm_eval utility benchmark](https://github.com/EleutherAI/lm-evaluation-harness): ```meta_mmlu_0shot_instruct```, ```meta_mmlu_pro_instruct``` (5-shot), ```meta_bbh``` (3-shot), ```meta_ifeval```, and ```meta_gpqa_cot```-diamond, [SEP utility/security benchmark](https://arxiv.org/pdf/2403.06833), [TaskTracker security benchmark](https://github.com/microsoft/TaskTracker) , [CyberSecEval2 benchmark](https://ai.meta.com/research/publications/cyberseceval-2-a-wide-ranging-cybersecurity-evaluation-suite-for-large-language-models/), and [InjecAgent security benchmark](https://arxiv.org/pdf/2403.02691)
++ This command tests [AlpacaEval2 utility benchmark](https://huggingface.co/datasets/tatsu-lab/alpaca_farm), [AlpacaFarm security benchmark](https://arxiv.org/pdf/2402.06363), [lm_eval utility benchmark](https://github.com/EleutherAI/lm-evaluation-harness) (```meta_mmlu_0shot_instruct```, ```meta_mmlu_pro_instruct``` 5-shot, ```meta_bbh``` 3-shot, ```meta_ifeval```, and ```meta_gpqa_cot``` diamond), [SEP utility/security benchmark](https://arxiv.org/pdf/2403.06833), [TaskTracker security benchmark](https://github.com/microsoft/TaskTracker) , [CyberSecEval2 benchmark](https://ai.meta.com/research/publications/cyberseceval-2-a-wide-ranging-cybersecurity-evaluation-suite-for-large-language-models/), and [InjecAgent security benchmark](https://arxiv.org/pdf/2403.02691)
 + To test AgentDojo, run
 > bash agentdojo/src/vllm_serve.sh \
 > bash agentdojo/src/run_benchmark_secalign.sh [log_dir] [defense]  \
@@ -58,6 +58,6 @@ with model-level defense.
 
 
 # Code Acknowledgements
-The majority of Meta SecAlign is licensed under CC-BY-NC, however portions of the project are available under separate license terms: [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) is licensed under Apache 2.0, [AgentDojo](https://github.com/ethz-spylab/agentdojo), [TaskTracker](https://github.com/microsoft/TaskTracker) and [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) are licensed under MIT, and [torchtune](https://github.com/pytorch/torchtune) is licensed under BSD 3. This software and/or data was deposited in the BAIR Open Research Commons repository in 2025.
+The majority of Meta SecAlign is licensed under CC-BY-NC, however portions of the project are available under separate license terms: [AlpacaEval2](https://github.com/tatsu-lab/alpaca_eval) is licensed under Apache 2.0, [AgentDojo](https://github.com/ethz-spylab/agentdojo), [TaskTracker](https://github.com/microsoft/TaskTracker) and [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) are licensed under MIT, and [torchtune](https://github.com/pytorch/torchtune) is licensed under BSD 3. This software and/or data was deposited in the BAIR Open Research Commons repository in 2025.
 
-Code from other repos: TaskTracker (setup.py), lm_eval_harness (lm_eval_config), alpaca_eval (glm_winrate.py).
+Code from other repos: TaskTracker (setup.py), lm_eval_harness (lm_eval_config), AlpacaEval2 (glm_winrate.py).
