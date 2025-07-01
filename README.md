@@ -41,9 +41,8 @@ with model-level defense.
 + This command tests [AlpacaEval2 utility benchmark](https://huggingface.co/datasets/tatsu-lab/alpaca_farm), [AlpacaFarm security benchmark](https://arxiv.org/pdf/2402.06363), [lm_eval utility benchmark](https://github.com/EleutherAI/lm-evaluation-harness): ```meta_mmlu_0shot_instruct```, ```meta_mmlu_pro_instruct``` (5-shot), ```meta_bbh``` (3-shot), ```meta_ifeval```, and ```meta_gpqa_cot```-diamond, [SEP utility/security benchmark](https://arxiv.org/pdf/2403.06833), [TaskTracker security benchmark](https://github.com/microsoft/TaskTracker) , [CyberSecEval2 benchmark](https://ai.meta.com/research/publications/cyberseceval-2-a-wide-ranging-cybersecurity-evaluation-suite-for-large-language-models/), and [InjecAgent security benchmark](https://arxiv.org/pdf/2403.02691)
 + Results will be logged to ```[model_path]/summary.tsv```
 
-To test AgentDojo, run
-> bash run_agentdojo_secalign.sh [model_path] [defense] \
-where [defense] can be ```None``` or any pre-defined defense in AgentDojo
+To test AgentDojo, run the following script where [defense] can be ```None``` or any pre-defined defense in AgentDojo
+> bash run_agentdojo_secalign.sh [model_path] [defense]
 
 # [Optional] SecAlign++ Preference Optimization
 + To fine-tune your own model using SecAlign++, first install the conda environment for training (TODO: merge with evaluation environment)
