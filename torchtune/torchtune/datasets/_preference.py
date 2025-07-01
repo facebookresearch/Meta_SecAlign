@@ -129,7 +129,6 @@ class PreferenceDataset(Dataset):
         return self._prepare_sample(sample)
 
     def _prepare_sample(self, sample: Mapping[str, Any]) -> dict[str, list[int]]:
-        #transformed_sample = self._message_transform(sample)
 
         prompt_tokenized = self._tokenizer.encode(sample["prompt"])
         prompt_mask = [True] * len(prompt_tokenized)
@@ -145,16 +144,10 @@ class PreferenceDataset(Dataset):
 
         # TODO: Truncation differs from original DPO repo
         # in DPO: first truncate prompts, then responses
-        #chosen_input_ids, chosen_masks = self._tokenizer.tokenize_messages(
-        #    transformed_sample["chosen"],
-        #)
         chosen_labels = list(
             np.where(chosen_masks, CROSS_ENTROPY_IGNORE_IDX, chosen_input_ids)
         )
 
-        #rejected_input_ids, rejected_masks = self._tokenizer.tokenize_messages(
-        #    transformed_sample["rejected"],
-        #)
         rejected_labels = list(
             np.where(rejected_masks, CROSS_ENTROPY_IGNORE_IDX, rejected_input_ids)
         )

@@ -4,8 +4,12 @@ export NUM_SAMPLES="-1"
 export RESPONSE="synthetic"
 export ATTACK="NaiveCompletion"
 export LR="1.6e-4"
-export OUTPUT_DIR="/checkpoint/memorization/chuanguo/meta-llama/${MODEL}_dpo_${ATTACK}_randpos_${RESPONSE}_${DATASET}_ns${NUM_SAMPLES}_bs256_${LR}_maxlength1024"
-export DATA_FILES="/home/chuanguo/SecAlign/data/preference_${MODEL}_dpo_${ATTACK}_randpos_${RESPONSE}_${DATASET}.json"
+export OUTPUT_DIR="meta-llama/${MODEL}_dpo_${ATTACK}_randpos_${RESPONSE}_${DATASET}_ns${NUM_SAMPLES}_bs256_${LR}_maxlength1024"
+export DATA_FILES="../data/preference_${MODEL}_dpo_${ATTACK}_randpos_${RESPONSE}_${DATASET}.json"
+
+tune download meta-llama/Meta-Llama-3.1-8B-Instruct \
+    --output-dir meta-llama/Meta-Llama-3.1-8B-Instruct \
+    --ignore-patterns "original/consolidated.00.pth"
 
 torchrun --nproc_per_node 8 recipes/lora_dpo_distributed.py \
     --config llama3.1_8B_lora.yaml \

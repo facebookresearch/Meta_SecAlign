@@ -16,8 +16,8 @@ model:
   lora_attn_modules: ['q_proj', 'v_proj']
   apply_lora_to_mlp: True
   apply_lora_to_output: False
-  lora_rank: 64  # higher increases accuracy and memory
-  lora_alpha: 8  # usually alpha=2*rank
+  lora_rank: 32  # higher increases accuracy and memory
+  lora_alpha: 8
   lora_dropout: 0.1
 
 tokenizer:
