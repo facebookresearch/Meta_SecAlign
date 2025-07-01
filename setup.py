@@ -164,8 +164,6 @@ tokenizer.save_pretrained('data')
 
 
 
-
-
 # Process CySE dataset
 dataset_out_name = 'data/CySE_prompt_injections.json'
 if not os.path.exists(dataset_out_name):
@@ -601,8 +599,8 @@ with open(alpaca_path + '/annotators/base.py', 'w') as f: f.write(base_code.repl
 # Download SecAlign models
 from huggingface_hub import snapshot_download, login
 login()
-snapshot_download(repo_id='facebook/Meta-SecAlign-8B', local_dir='meta-llama/Llama-3.1-8B-Instruct_SecAlign')
-snapshot_download(repo_id='facebook/Meta-SecAlign-70B', local_dir='meta-llama/Llama-3.3-70B-Instruct_SecAlign')
+snapshot_download(repo_id='facebook/Meta-SecAlign-8B', local_dir='meta-llama/Llama-3.1-8B-Instruct-SecAlign')
+snapshot_download(repo_id='facebook/Meta-SecAlign-70B', local_dir='meta-llama/Llama-3.3-70B-Instruct-SecAlign')
 
 
 
