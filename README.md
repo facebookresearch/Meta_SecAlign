@@ -22,11 +22,12 @@ with model-level defense.
 > git clone https://github.com/facebookresearch/SecAlign \
 > cd SecAlign
 + Install environment dependencies for evaluation
-> conda env create -n secalign python==3.12 \
+> conda create -n secalign python==3.12 \
+> conda activate secalign \
 > pip install -r requirements.txt
 + Download dependencies (run with 1 or 4 available GPUs to trigger necessary inference)
 > python setup.py
-+ Configure openai dependencies for utility evaluation: create ```data/openai_configs.yaml``` following ```data/openai_configs_examle.yaml```
++ Configure openai dependencies for utility evaluation: create ```data/openai_configs.yaml``` following ```data/openai_configs_example.yaml```
 + Configure gemini keys in ```data/gemini_configs.yaml```
 > default: \n - client_class: "genai.Client" \n - api_key: "..."
 
@@ -35,7 +36,7 @@ with model-level defense.
 
 # [Optional] SecAlign Preference Optimization
 + To train SecAlign models from scratch, first install the conda environment for training (TODO: merge with evaluation environment)
-> conda env create -n secalign_training python==3.12 \
+> conda create -n secalign_training python==3.12 \
 > conda env update -f requirements_training.yml \
 > pip install -r requirements_training.txt --no-deps
 + Then install the custom torchtune package locally from source (TODO: restructure preference dataset to work with torchtune without modification)

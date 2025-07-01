@@ -1,3 +1,8 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
 export MODEL="Llama-3.1-8B-Instruct"
 export DATASET="alpaca"
 export NUM_SAMPLES="-1"
