@@ -30,6 +30,9 @@ with model-level defense.
 + Configure gemini keys in ```data/gemini_configs.yaml```
 > default: \n - client_class: "genai.Client" \n - api_key: "..."
 
+# Demo
++ You can run ```demo.py``` to see the SecAlign defense in action. Try to come up with creative injected prompts to break our defense!
+
 # [Optional] SecAlign Preference Optimization
 + To train SecAlign models from scratch, first install the conda environment for training (TODO: merge with evaluation environment)
 > conda env create -n secalign_training python==3.12 \
