@@ -1,8 +1,6 @@
 # Meta SecAlign: A Secure Foundation LLM Against Prompt Injection Attacks
 [Sizhe Chen](https://sizhe-chen.github.io)\*, [Arman Zharmagambetov](https://arman-z.github.io), [David Wagner](https://people.eecs.berkeley.edu/~daw), [Chuan Guo](https://sites.google.com/view/chuanguo)\*
 
-[![](https://img.shields.io/badge/Paper-a8c66c)](https://arxiv.org/pdf/2410.05451) [![](https://img.shields.io/badge/Media-75291c)](https://bair.berkeley.edu/blog/2025/04/11/prompt-injection-defense)
-
 Prompt injection attacks pose a significant security threat to LLM-integrated applications. Model-level
 defenses have shown strong effectiveness, but are currently deployed into commercial-grade models in
 a closed-source manner. We believe open-source models are needed by the AI security community,
