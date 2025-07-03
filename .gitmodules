@@ -1,0 +1,6 @@
+[submodule "torchtune"]
+	path = torchtune
+	url = git@github.com:pytorch/torchtune.git
+[submodule "agentdojo"]
+	path = agentdojo
+	url = git@github.com:ethz-spylab/agentdojo.git
