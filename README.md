@@ -17,7 +17,7 @@ with model-level defense.
 
 # Environment Setup
 + Hardware requirements. 8B: 4 80G A100s for training, 1 16G GPU for evaluation. 70B: 8 141GB H200s for training, 4 (recommending 8 for efficiency) 80G A100s for evaluation.
-> git clone --recurse-submodules https://github.com/facebookresearch/Meta_SecAlign \
+> git clone --recurse-submodules git@github.com:facebookresearch/Meta_SecAlign.git \
 > cd Meta_SecAlign
 + Apply patch to AgentDojo and torchtune
 > bash apply_patch.sh
