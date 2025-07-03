@@ -1,0 +1,7 @@
+default:
+    - client_class: "openai.AzureOpenAI" # doesn't use the `openai.OpenAI` client class
+      # the following are passed to the `AzureOpenAI` client class
+      azure_deployment: "gpt-4o" # name of the model
+      api_key: "YOUR_AZURE_API_KEY" # your Azure OpenAI API key
+      azure_endpoint: "YOUR_AZURE_OPENAI_ENDPOINT" # your Azure OpenAI endpoint (typically starts with "https://")
+      api_version: "YOUR_API_VERSION_DATE" # API version, e.g., "2024-10-21"

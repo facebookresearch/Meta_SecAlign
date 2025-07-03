@@ -27,9 +27,8 @@ with model-level defense.
 > pip install -r requirements.txt
 + Download dependencies (run with 1 or 4 available GPUs to trigger necessary inference)
 > python setup.py
-+ Configure openai dependencies for utility evaluation: create ```data/openai_configs.yaml``` following ```data/openai_configs_example.yaml```
-+ Configure gemini keys in ```data/gemini_configs.yaml```
-> default: \n - client_class: "genai.Client" \n - api_key: "..."
++ Configure openai keys in (use for utility evaluation): ```data/openai_configs.yaml```. Note: this assumes accessing OpenAI API via AzureOpenAI.
++ Configure gemini keys in (optional): ```data/gemini_configs.yaml```
 
 # Demo
 + You can run ```demo.py``` to see the SecAlign defense in action. Try to come up with creative injected prompts to break our defense!
