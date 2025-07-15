@@ -33,7 +33,7 @@ with model-level defense.
 + Configure gemini keys in (optional): ```data/gemini_configs.yaml```
 ## [Optional] Preference Dataset Generation
 + If you want to fine-tune your own SecAlign models, you have to generate the preference dataset by running
-> python generate_dataset.py -m [model_path] --dataset alpaca --self_generated_response --random_inject_pos
+> python generate_data.py -m [model_path] --dataset alpaca --self_generated_response --random_inject_pos
 + The options ```dataset```, ```self_generated_response``` and ```random_inject_pos``` can be modified accordingly to reproduce our ablation studies
 
 # Demo
