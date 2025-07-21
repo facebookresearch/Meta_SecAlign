@@ -36,7 +36,7 @@ data_urls = [
     'https://raw.githubusercontent.com/uiuc-kang-lab/InjecAgent/refs/heads/main/data/test_cases_dh_base.json',
     'https://raw.githubusercontent.com/uiuc-kang-lab/InjecAgent/refs/heads/main/data/test_cases_dh_enhanced.json',
     'https://raw.githubusercontent.com/uiuc-kang-lab/InjecAgent/refs/heads/main/data/test_cases_ds_base.json',
-    'https://raw.githubusercontent.com/uiuc-kang-lab/InjecAgent/refs/heads/main/data/test_cases_ds_enhanced.json'
+    'https://raw.githubusercontent.com/uiuc-kang-lab/InjecAgent/refs/heads/main/data/test_cases_ds_enhanced.json',
     'https://raw.githubusercontent.com/uiuc-kang-lab/InjecAgent/refs/heads/main/data/tools.json'
 ]
 
