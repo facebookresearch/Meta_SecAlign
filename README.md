@@ -1,7 +1,7 @@
 # Meta SecAlign: A Secure Foundation LLM Against Prompt Injection Attacks
 [Sizhe Chen](https://sizhe-chen.github.io)\*, [Arman Zharmagambetov](https://arman-z.github.io), [David Wagner](https://people.eecs.berkeley.edu/~daw), [Chuan Guo](https://sites.google.com/view/chuanguo)\*
 
-**Paper link:** https://arxiv.org/abs/2507.02735
+[![](https://img.shields.io/badge/Paper-a8c66c)](https://arxiv.org/pdf/2507.02735) [![](https://img.shields.io/badge/Meta%20SecAlign-8B-FFD21E)](https://huggingface.co/facebook/Meta-SecAlign-8B) [![](https://img.shields.io/badge/Meta%20SecAlign-70B-FFD21E)](https://huggingface.co/facebook/Meta-SecAlign-70B) [![](https://img.shields.io/badge/Poster-1b6535)](https://drive.google.com/file/d/1JbbgKPQVQ-Pa5LVYWyR4Eo5ckNyrZiPw/view?usp=sharing)
 
 Prompt injection attacks pose a significant security threat to LLM-integrated applications. Model-level
 defenses have shown strong effectiveness, but are currently deployed into commercial-grade models in
@@ -24,7 +24,7 @@ with model-level defense.
 + Apply patch to AgentDojo and torchtune
 > bash apply_patch.sh
 + Install environment dependencies for evaluation
-> conda create -n secalign python==3.12 \
+> conda create -n secalign python==3.10 \
 > conda activate secalign \
 > pip install -r requirements.txt
 + Download dependencies (run with 1 or 4 available GPUs to trigger necessary inference)
