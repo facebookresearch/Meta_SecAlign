@@ -57,7 +57,7 @@ To test AgentDojo, run the following script where ```defense``` can be ```None``
 + Then install the custom torchtune package locally from source (TODO: restructure preference dataset to work with torchtune without modification)
 > cd torchtune \
 > pip install -e .
-+ Run the following script to train the 8B or 70B model: ```bash secalign_llama3.1_8b.sh``` or ```bash secalign_llama3.3_70b.sh```
++ Run the following script to train the 8B or 70B model: ```bash secalign_llama3.1_8B.sh``` or ```bash secalign_llama3.3_70B.sh```
 
 # Code Acknowledgements
 Significantly improved from [SecAlign](https://github.com/facebookresearch/SecAlign), the majority of Meta SecAlign code is licensed under CC-BY-NC, however portions of the project are available under separate license terms: [AlpacaEval2](https://github.com/tatsu-lab/alpaca_eval) is licensed under Apache 2.0, [AgentDojo](https://github.com/ethz-spylab/agentdojo), [TaskTracker](https://github.com/microsoft/TaskTracker) and [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) are licensed under MIT, and [torchtune](https://github.com/pytorch/torchtune) is licensed under BSD 3. This software and/or data was deposited in the BAIR Open Research Commons repository in 2025.
