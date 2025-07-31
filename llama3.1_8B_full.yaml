@@ -15,6 +15,8 @@
 #
 
 output_dir: /tmp/llama3_1_8B/full_dpo # /tmp may be deleted by your system. Change it to your preference.
+base_dir: BASE_DIR_PLACEHOLDER # Change this to your base directory where the model is stored
+wand_entity: WANDB_ENTITY_PLACEHOLDER # Change this to your WandB entity
 
 # Model Arguments
 model:
@@ -23,12 +25,12 @@ model:
 # Tokenizer
 tokenizer:
   _component_: torchtune.models.llama3.llama3_tokenizer
-  path: meta-llama/Meta-Llama-3.1-8B-Instruct/original/tokenizer.model
+  path: ${base_dir}/meta-llama/Meta-Llama-3.1-8B-Instruct/original/tokenizer.model
   max_seq_len: 2048 # higher increases memory
 
 checkpointer:
   _component_: torchtune.training.FullModelHFCheckpointer
-  checkpoint_dir: meta-llama/Meta-Llama-3.1-8B-Instruct/
+  checkpoint_dir: ${base_dir}/meta-llama/Meta-Llama-3.1-8B-Instruct/
   checkpoint_files: [
     model-00001-of-00004.safetensors,
     model-00002-of-00004.safetensors,
@@ -43,7 +45,7 @@ resume_from_checkpoint: False
 # The ref_checkpointer should always point to the original weights.
 ref_checkpointer:
   _component_: torchtune.training.FullModelHFCheckpointer
-  checkpoint_dir: meta-llama/Meta-Llama-3.1-8B-Instruct/
+  checkpoint_dir: ${base_dir}/meta-llama/Meta-Llama-3.1-8B-Instruct/
   checkpoint_files: [
     model-00001-of-00004.safetensors,
     model-00002-of-00004.safetensors,
@@ -80,7 +82,7 @@ loss:
   label_smoothing: 0  # default value is 0
 
 # Training
-epochs: 3
+epochs: 1
 batch_size: 2
 max_steps_per_epoch: null
 gradient_accumulation_steps: 16  # Use to increase effective batch size
@@ -91,7 +93,7 @@ compile: False  # torch.compile the model + loss, True increases speed + decreas
 metric_logger:
   _component_: torchtune.training.metric_logging.WandBLogger
   project: secalign
-  entity: llm-attack-gang
+  entity: ${wand_entity}
   log_dir: ${output_dir}/logs
 log_every_n_steps: 1
 log_peak_memory_stats: True

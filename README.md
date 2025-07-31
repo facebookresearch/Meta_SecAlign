@@ -33,7 +33,7 @@ with model-level defense.
 + Configure gemini keys in (optional): ```data/gemini_configs.yaml```
 ## [Optional] Preference Dataset Generation
 + If you want to fine-tune your own SecAlign models, you have to generate the preference dataset by running
-> python generate_dataset.py -m [model_path] --dataset alpaca --self_generated_response --random_inject_pos
+> python generate_data.py -m [model_path] --dataset alpaca --self_generated_response --random_inject_pos
 + The options ```dataset```, ```self_generated_response``` and ```random_inject_pos``` can be modified accordingly to reproduce our ablation studies
 
 # Demo
@@ -57,7 +57,8 @@ To test AgentDojo, run the following script where ```defense``` can be ```None``
 + Then install the custom torchtune package locally from source (TODO: restructure preference dataset to work with torchtune without modification)
 > cd torchtune \
 > pip install -e .
-+ Run the following script to train the 8B or 70B model: ```bash secalign_llama3.1_8B.sh``` or ```bash secalign_llama3.3_70B.sh```
++ Run the following scripts to train the 8B or 70B models using LoRA: ```bash secalign_llama3.1_8B.sh``` or ```bash secalign_llama3.3_70B.sh```
++ Run the following scripts to run the full finetuning of the 8B or 70B models: ```bash secalign_llama3.1_8B_full.sh``` or ```bash secalign_llama3.3_70B_full.sh```
 
 # Code Acknowledgements
 Significantly improved from [SecAlign](https://github.com/facebookresearch/SecAlign), the majority of Meta SecAlign code is licensed under CC-BY-NC, however portions of the project are available under separate license terms: [AlpacaEval2](https://github.com/tatsu-lab/alpaca_eval) is licensed under Apache 2.0, [AgentDojo](https://github.com/ethz-spylab/agentdojo), [TaskTracker](https://github.com/microsoft/TaskTracker) and [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) are licensed under MIT, and [torchtune](https://github.com/pytorch/torchtune) is licensed under BSD 3. This software and/or data was deposited in the BAIR Open Research Commons repository in 2025.

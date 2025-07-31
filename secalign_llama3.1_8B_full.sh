@@ -3,7 +3,7 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 
-export LR=${1:-"3.2e-6"}
+export LR=${1:-"1.0e-5"}
 export MODEL="Llama-3.1-8B-Instruct"
 export DATASET="alpaca"
 export NUM_SAMPLES="-1"
@@ -21,9 +21,10 @@ echo "LR: $LR"
 echo "OUTPUT_DIR: $OUTPUT_DIR"
 echo "DATA_FILES: $DATA_FILES"
 
-tune download meta-llama/Meta-Llama-3.1-8B-Instruct \
-    --output-dir meta-llama/Meta-Llama-3.1-8B-Instruct \
-    --ignore-patterns "original/consolidated.00.pth"
+# Uncomment the following line to download the model if needed
+# tune download meta-llama/Meta-Llama-3.1-8B-Instruct \
+#     --output-dir meta-llama/Meta-Llama-3.1-8B-Instruct \
+#     --ignore-patterns "original/consolidated.00.pth"
 
 torchrun --nproc_per_node 8 torchtune/recipes/full_dpo_distributed.py \
     --config llama3.1_8B_full.yaml \

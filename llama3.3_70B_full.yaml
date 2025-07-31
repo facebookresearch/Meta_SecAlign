@@ -16,33 +16,20 @@
 # This config is only tested on an 8xA100 machine.
 #
 
-output_dir: /tmp/torchtune/llama3_3_70B/full # /tmp may be deleted by your system. Change it to your preference.
+output_dir: /tmp/torchtune/llama3_3_70B/full_dpo # /tmp may be deleted by your system. Change it to your preference.
+base_dir: BASE_DIR_PLACEHOLDER # Change this to your base directory where the model is stored
+wand_entity: WANDB_ENTITY_PLACEHOLDER # Change this to your WandB entity
 
 # Parallelism
-tensor_parallel_dim: 1
-tensor_parallel_plan:
-  _component_: torchtune.models.llama3.base_llama_tp_plan
+# tensor_parallel_dim: 1
+# tensor_parallel_plan:
+#   _component_: torchtune.models.llama3.base_llama_tp_plan
 
 # Tokenizer
 tokenizer:
   _component_: torchtune.models.llama3.llama3_tokenizer
-  path: /tmp/Llama-3.3-70B-Instruct/original/tokenizer.model
-  max_seq_len: null
-
-# Dataset and Sampler
-dataset:
-  _component_: torchtune.datasets.alpaca_cleaned_dataset
-  packed: False  # True increases speed
-  split: train[:95%]
-seed: null
-shuffle: True
-
-# Validation
-run_val_every_n_steps: null  # Change to an integer to enable validation every N steps
-dataset_val:
-  _component_: torchtune.datasets.alpaca_cleaned_dataset
-  split: train[95%:]
-batch_size_val: ${batch_size}
+  path: ${base_dir}/meta-llama/Llama-3.3-70B-Instruct/original/tokenizer.model
+  max_seq_len: 1024 # higher increases memory
 
 # Model Arguments
 model:
@@ -50,54 +37,82 @@ model:
 
 checkpointer:
   _component_: torchtune.training.FullModelHFCheckpointer
-  checkpoint_dir: /tmp/Llama-3.3-70B-Instruct/
+  checkpoint_dir: ${base_dir}/meta-llama/Llama-3.3-70B-Instruct/
   checkpoint_files:
     filename_format: model-{}-of-{}.safetensors
     max_filename: "00030"
   recipe_checkpoint: null
   output_dir: ${output_dir}
   model_type: LLAMA3
+
+# The ref_checkpointer should always point to the original weights.
+ref_checkpointer:
+  _component_: torchtune.training.FullModelHFCheckpointer
+  checkpoint_dir: ${base_dir}/meta-llama/Llama-3.3-70B-Instruct/
+  checkpoint_files:
+    filename_format: model-{}-of-{}.safetensors
+    max_filename: "00030"
+  recipe_checkpoint: null
+  output_dir: ${output_dir}
+  model_type: LLAMA3
+
 resume_from_checkpoint: False
+# enable_async_checkpointing: True
 
-# Fine-tuning arguments
-batch_size: 2
-epochs: 1
+# Dataset and Sampler
+dataset:
+  _component_: torchtune.datasets.preference_dataset
+  source: json
+  data_files: data/preference_Llama-3.3-70B-Instruct_dpo_NaiveCompletion_randpos_synthetic_alpaca.json
+  packed: False  # True increases speed
+  split: train
+seed: null
+shuffle: True
 
+# Optimizer and Scheduler
 optimizer:
   _component_: torch.optim.AdamW
-  lr: 2e-5
-  # Note: highly recommended to use fused=True optimizer flag
-  # with CPU offload for faster optimizer step.
-  fused: False
+  fused: True
+  weight_decay: 0.0
+  lr: 1.0e-5
+lr_scheduler:
+  _component_: torchtune.training.lr_schedulers.get_cosine_schedule_with_warmup
+  num_warmup_steps: 0
 
 loss:
-  _component_: torchtune.modules.loss.LinearCrossEntropyLoss
+  _component_: torchtune.rlhf.loss.DPOLoss
+  beta: 0.1  # default value is 0.1
+  label_smoothing: 0  # default value is 0
+
+# Training
+epochs: 1
+batch_size: 1
 max_steps_per_epoch: null
-gradient_accumulation_steps: 1  # Use to increase effective batch size
-
-
-# Training env
-device: cuda
+gradient_accumulation_steps: 32  # Use to increase effective batch size
+clip_grad_norm: 1.0
 
 # Memory management
+device: cuda
 enable_activation_checkpointing: True  # True reduces memory
-enable_activation_offloading: False  # True reduces memory
+enable_activation_offloading: True  # True reduces memory
 custom_sharded_layers: ['tok_embeddings', 'output']  # Layers to shard separately (useful for large vocab size models). Lower Memory, but lower speed.
-fsdp_cpu_offload: True
-clip_grad_norm: null
+# fsdp_cpu_offload: True
 compile: False  # torch.compile the model + loss, True increases speed + decreases memory
-optimizer_in_bwd: False  # True saves memory. Requires gradient_accumulation_steps=1
 
 # Reduced precision
 dtype: bf16
 
 # Logging
 metric_logger:
-  _component_: torchtune.training.metric_logging.DiskLogger
+  _component_: torchtune.training.metric_logging.WandBLogger
+  project: secalign
+  entity: ${wand_entity}
   log_dir: ${output_dir}/logs
 log_every_n_steps: 1
 log_peak_memory_stats: True
 log_level: INFO  # DEBUG, WARN, etc.
+
+
 
 # Profiler (disabled)
 profiler:
