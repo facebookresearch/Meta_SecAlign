@@ -21,7 +21,7 @@ with model-level defense.
 
 *Latest News* 🔥
 
-- [2025/08] We added support for full scale finetuning of Llama-3.x and Llama-4 models. Refere to to [SecAlign++ Preference Optimization](#optional-secalign-preference-optimization) section for more info.
+- [2025/08] We added support for full scale finetuning of Llama-3.x and Llama-4 models. Refere to [SecAlign++ Preference Optimization](#optional-secalign-preference-optimization) section for more info.
 
 # Environment Setup
 + Hardware requirements. 8B: 4 80G A100s for training, 1 16G GPU for evaluation. 70B: 8 141GB H200s for training, 4 (recommending 8 for efficiency) 80G A100s for evaluation.
