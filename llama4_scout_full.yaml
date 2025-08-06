@@ -1,22 +1,22 @@
 # Config for multi-device full finetuning in full_dpo_distributed.py
-# using a Llama3.3 70B Instruct model
+# using a Llama4 17Bx16E MoE model
 #
 # This config assumes that you've run the following command before launching
 # this run:
-#   tune download meta-llama/Llama-3.3-70B-Instruct --ignore-patterns "original/consolidated*" --output-dir /tmp/Llama-3.3-70B-Instruct
+#   ttune download meta-llama/Llama-4-Scout-17B-16E-Instruct --output-dir /tmp/Llama-4-Scout-17B-16E-Instruct
 #
 # To launch on 8 devices, run the following command from root:
-#   tune run --nproc_per_node 8 full_dpo_distributed --config llama3.3_70B_full
+#   tune run --nproc_per_node 8 full_dpo_distributed --config llama4_scout_full
 #
 # You can add specific overrides through the command line. For example
 # to override the checkpointer directory while launching training
 # you can run:
-#   tune run --nproc_per_node 8 full_dpo_distributed --config llama3.3_70B_full checkpointer.checkpoint_dir=<YOUR_CHECKPOINT_DIR>
+#   tune run --nproc_per_node 8 full_dpo_distributed --config llama4_scout_full checkpointer.checkpoint_dir=<YOUR_CHECKPOINT_DIR>
 #
 # This config is only tested on an 8xH200 machine.
 #
 
-output_dir: /tmp/torchtune/llama3_3_70B/full_dpo # /tmp may be deleted by your system. Change it to your preference.
+output_dir: /tmp/torchtune/llama4_scout/full_dpo # /tmp may be deleted by your system. Change it to your preference.
 base_dir: BASE_DIR_PLACEHOLDER # Change this to your base directory where the model is stored
 wand_entity: WANDB_ENTITY_PLACEHOLDER # Change this to your WandB entity
 
@@ -27,34 +27,34 @@ wand_entity: WANDB_ENTITY_PLACEHOLDER # Change this to your WandB entity
 
 # Tokenizer
 tokenizer:
-  _component_: torchtune.models.llama3.llama3_tokenizer
-  path: ${base_dir}/meta-llama/Llama-3.3-70B-Instruct/original/tokenizer.model
+  _component_: torchtune.models.llama4.llama4_transform
+  path: ${base_dir}/meta-llama/Llama-4-Scout-17B-16E-Instruct/tokenizer.model
   max_seq_len: 1024 # higher increases memory
 
 # Model Arguments
 model:
-  _component_: torchtune.models.llama3_3.llama3_3_70b
+  _component_: torchtune.models.llama4.llama4_scout_17b_16e
 
 checkpointer:
   _component_: torchtune.training.FullModelHFCheckpointer
-  checkpoint_dir: ${base_dir}/meta-llama/Llama-3.3-70B-Instruct/
+  checkpoint_dir: ${base_dir}/meta-llama/Llama-4-Scout-17B-16E-Instruct/
   checkpoint_files:
     filename_format: model-{}-of-{}.safetensors
-    max_filename: "00030"
+    max_filename: "00050"
   recipe_checkpoint: null
   output_dir: ${output_dir}
-  model_type: LLAMA3
+  model_type: LLAMA4
 
 # The ref_checkpointer should always point to the original weights.
 ref_checkpointer:
   _component_: torchtune.training.FullModelHFCheckpointer
-  checkpoint_dir: ${base_dir}/meta-llama/Llama-3.3-70B-Instruct/
+  checkpoint_dir: ${base_dir}/meta-llama/Llama-4-Scout-17B-16E-Instruct/
   checkpoint_files:
     filename_format: model-{}-of-{}.safetensors
-    max_filename: "00030"
+    max_filename: "00050"
   recipe_checkpoint: null
   output_dir: ${output_dir}
-  model_type: LLAMA3
+  model_type: LLAMA4
 
 resume_from_checkpoint: False
 # enable_async_checkpointing: True
@@ -63,7 +63,8 @@ resume_from_checkpoint: False
 dataset:
   _component_: torchtune.datasets.preference_dataset
   source: json
-  data_files: data/preference_Llama-3.3-70B-Instruct_dpo_NaiveCompletion_randpos_synthetic_alpaca.json
+  # data_files: data/preference_Llama-3.3-70B-Instruct_dpo_NaiveCompletion_randpos_synthetic_alpaca.json
+  data_files: data/preference_Llama-4-Scout-17B-16E-Instruct_randpos1_randturn0_selflabel1_alpaca.json
   packed: False  # True increases speed
   split: train
 seed: null
@@ -74,7 +75,7 @@ optimizer:
   _component_: torch.optim.AdamW
   fused: True
   weight_decay: 0.0
-  lr: 1.0e-5
+  lr: 1.2e-5
 lr_scheduler:
   _component_: torchtune.training.lr_schedulers.get_cosine_schedule_with_warmup
   num_warmup_steps: 0
@@ -95,8 +96,8 @@ clip_grad_norm: 1.0
 device: cuda
 enable_activation_checkpointing: True  # True reduces memory
 enable_activation_offloading: True  # True reduces memory
-custom_sharded_layers: ['tok_embeddings', 'output']  # Layers to shard separately (useful for large vocab size models). Lower Memory, but lower speed.
-# fsdp_cpu_offload: True
+# custom_sharded_layers: ['tok_embeddings', 'output']  # Layers to shard separately (useful for large vocab size models). Lower Memory, but lower speed.
+fsdp_cpu_offload: False  # True offloads FSDP parameters to CPU, reducing GPU memory usage
 compile: False  # torch.compile the model + loss, True increases speed + decreases memory
 
 # Reduced precision
@@ -114,27 +115,7 @@ log_level: INFO  # DEBUG, WARN, etc.
 
 
 
-# Profiler (disabled)
+# (disabled) Useful for understanding how to optimize memory and performance
 profiler:
   _component_: torchtune.training.setup_torch_profiler
   enabled: False
-
-  #Output directory of trace artifacts
-  output_dir: ${output_dir}/profiling_outputs
-
-  #`torch.profiler.ProfilerActivity` types to trace
-  cpu: True
-  cuda: True
-
-  #trace options passed to `torch.profiler.profile`
-  profile_memory: False
-  with_stack: False
-  record_shapes: True
-  with_flops: False
-
-  # `torch.profiler.schedule` options:
-  # wait_steps -> wait, warmup_steps -> warmup, active_steps -> active, num_cycles -> repeat
-  wait_steps: 5
-  warmup_steps: 3
-  active_steps: 2
-  num_cycles: 1
