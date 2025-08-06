@@ -17,6 +17,8 @@ to general instruction-following. Our best model—Meta-SecAlign-70B—achieves 
 robustness against prompt injection attacks and comparable utility to closed-source commercial LLM
 with model-level defense.
 
+---
+
 *Latest News* 🔥
 
 - [2025/08] We added support for full scale finetuning of Llama-3.x and Llama-4 models. Refere to to [SecAlign++ Preference Optimization](#optional-secalign-preference-optimization) section for more info.
