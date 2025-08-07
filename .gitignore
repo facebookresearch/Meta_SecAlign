@@ -4,3 +4,7 @@ meta-llama*
 *-log
 .cache
 figures
+data/
+*.pyc
+slurm/
+.wandb*
