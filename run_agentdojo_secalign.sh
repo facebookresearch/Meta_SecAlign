@@ -3,10 +3,10 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 
-export MODEL_PATH=${1:-"/checkpoint/memorization/armanz/secalign/meta-llama/Llama-3.3-70B-Instruct"}
+export MODEL_PATH=${1:-"meta-llama/Llama-3.3-70B-Instruct"}
 export DEFENSE=${2:-"None"}
 export USE_LORA=${3:-"True"}
-export LORA_PATH=${4:-"/checkpoint/memorization/armanz/secalign/meta-llama/Llama-3.3-70B-Instruct_SecAlign_official"}
+export LORA_PATH=${4:-"meta-llama/Llama-3.3-70B-Instruct_SecAlign_official"}
 
 export MODEL=$(basename "$MODEL_PATH")
 cwd=$(pwd)
