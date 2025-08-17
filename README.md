@@ -17,6 +17,12 @@ to general instruction-following. Our best model—Meta-SecAlign-70B—achieves 
 robustness against prompt injection attacks and comparable utility to closed-source commercial LLM
 with model-level defense.
 
+---
+
+*Latest News* 🔥
+
+- [2025/08] We added support for full scale finetuning of Llama-3.x and Llama-4 models. Refer to [SecAlign++ Preference Optimization](#optional-secalign-preference-optimization) section for more info.
+
 # Environment Setup
 + Hardware requirements. 8B: 4 80G A100s for training, 1 16G GPU for evaluation. 70B: 8 141GB H200s for training, 4 (recommending 8 for efficiency) 80G A100s for evaluation.
 > git clone --recurse-submodules git@github.com:facebookresearch/Meta_SecAlign.git \
@@ -47,7 +53,7 @@ with model-level defense.
 + Results will be logged to ```[model_path]/summary.tsv```
 
 To test AgentDojo, run the following script where ```defense``` can be ```None``` or any pre-defined defense in AgentDojo
-> bash run_agentdojo_secalign.sh [model_path] [defense]
+> bash run_agentdojo_secalign.sh [model_path] [defense] [use_lora] [lora_path]
 
 # [Optional] SecAlign++ Preference Optimization
 + To fine-tune your own model using SecAlign++, first install the conda environment for training (TODO: merge with evaluation environment)
@@ -57,7 +63,9 @@ To test AgentDojo, run the following script where ```defense``` can be ```None``
 + Then install the custom torchtune package locally from source (TODO: restructure preference dataset to work with torchtune without modification)
 > cd torchtune \
 > pip install -e .
-+ Run the following script to train the 8B or 70B model: ```bash secalign_llama3.1_8b.sh``` or ```bash secalign_llama3.3_70b.sh```
++ Run the following scripts to train the 8B or 70B models using LoRA: ```bash secalign_llama3.1_8B.sh``` or ```bash secalign_llama3.3_70B.sh```
++ Run the following scripts for launching full finetuning of the 8B or 70B models: ```bash secalign_llama3.1_8B_full.sh``` or ```bash secalign_llama3.3_70B_full.sh```. These bash scripts refer to ```llama3.1_8B_full.yaml``` and ```llama3.3_70B_full.yaml``` files so you might want to inspect them to change hyperparameters (and set up necesseray PATHs).
++ We also provide a script for running Llama-4-Scout-17B-16E-Instruct model. It was tested on 16xH200 (i.e. 2 GPU nodes). See details in ```secalign_llama4_multinode.slurm``` and ```llama4_scout_full.yaml```.
 
 # Code Acknowledgements
 Significantly improved from [SecAlign](https://github.com/facebookresearch/SecAlign), the majority of Meta SecAlign code is licensed under CC-BY-NC, however portions of the project are available under separate license terms: [AlpacaEval2](https://github.com/tatsu-lab/alpaca_eval) is licensed under Apache 2.0, [AgentDojo](https://github.com/ethz-spylab/agentdojo), [TaskTracker](https://github.com/microsoft/TaskTracker) and [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) are licensed under MIT, and [torchtune](https://github.com/pytorch/torchtune) is licensed under BSD 3. This software and/or data was deposited in the BAIR Open Research Commons repository in 2025.

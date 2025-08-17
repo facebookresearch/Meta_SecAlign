@@ -200,7 +200,8 @@ def load_vllm_model(model_name_or_path, tensor_parallel_size=1):
     base_model_path = model_name_or_path.split('_')[0]
     tokenizer = transformers.AutoTokenizer.from_pretrained(model_name_or_path) # training code should the modified tokenizer to model_name_or_path
     model = LLM(model=base_model_path, enable_lora=base_model_path != model_name_or_path,
-                tensor_parallel_size=tensor_parallel_size, max_lora_rank=64, trust_remote_code=True)
+                tensor_parallel_size=tensor_parallel_size, max_lora_rank=64, trust_remote_code=True,
+                max_model_len=32000,)
     tokenizer.pad_token = tokenizer.eos_token
     return model, tokenizer
 

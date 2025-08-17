@@ -22,11 +22,19 @@ def main(args):
     base_model_path = args.model_name_or_path.split('_')[0]
     if args.model_name_or_path != base_model_path: model_name_or_path_changed_lora_alpha = load_vllm_model_with_changed_lora_alpha(args.model_name_or_path, args.lora_alpha)
     else: model_name_or_path_changed_lora_alpha = None
-    lm_obj = VLLM(pretrained=base_model_path, lora_local_path=model_name_or_path_changed_lora_alpha, 
-                  enable_lora=args.model_name_or_path != base_model_path, max_lora_rank=64, 
-                  dtype="auto", data_parallel_size=args.data_parallel_size, tensor_parallel_size=args.tensor_parallel_size, 
-                  max_model_len=8192, 
-                  add_bos_token=False) # this does not load the vllm model/engine
+    print(f"Using base model path: {base_model_path}, lora path: {model_name_or_path_changed_lora_alpha}, data_parallel_size: {args.data_parallel_size}, tensor_parallel_size: {args.tensor_parallel_size}")
+    lm_obj = VLLM(
+        pretrained=base_model_path, 
+        lora_local_path=model_name_or_path_changed_lora_alpha, 
+        enable_lora=args.model_name_or_path != base_model_path, 
+        max_lora_rank=64, 
+        dtype="auto", 
+        data_parallel_size=args.data_parallel_size, 
+        tensor_parallel_size=args.tensor_parallel_size, 
+        max_model_len=8192, 
+        add_bos_token=False,
+        batch_size=args.batch_size,
+    ) # this does not load the vllm model/engine
 
     # indexes all tasks from the `lm_eval/tasks` subdirectory.
     # Alternatively, you can set `TaskManager(include_path="path/to/my/custom/task/configs")`
@@ -51,7 +59,8 @@ def main(args):
             tasks=[task],
             num_fewshot=0, # CoT examples are already given in the data
             task_manager=task_manager,
-            apply_chat_template=False#args.apply_chat_template
+            apply_chat_template=False,  #args.apply_chat_template
+            batch_size=args.batch_size,
         )
         
         if results is not None: 
@@ -80,7 +89,7 @@ if __name__ == "__main__":
     #parser.add_argument("--data_parallel_size", type=int, default=1)
     parser.add_argument("--tensor_parallel_size", type=int, default=1)
     parser.add_argument("--include_path", type=str, default='lm_eval_config')
-    parser.add_argument("--batch_size", type=int, default=64)
+    parser.add_argument("--batch_size", type=int, default=512)
     parser.add_argument("--tasks", type=str, default=['all'], nargs='+')
     #parser.add_argument("--add_bos_token", action="store_true", default=False) # False gives better scores
     parser.add_argument("--skip_run_tasks", action="store_true", default=False)
