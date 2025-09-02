@@ -149,7 +149,7 @@ def after_inference_evaluation(args, attack, outputs, in_response, begin_with):
 
     summary_results(log_dir + '/summary.tsv', {
         'attack': attack, 
-        'ASR/Utility': '%.2f' % ((begin_with * 100) if begin_with > 0 else (in_response * 100)) + '%', 
+        'ASR/Utility': '%.2f' % ((begin_with * 100) if begin_with >= 0 else (in_response * 100)) + '%', 
         'defense': args.defense, 
         'instruction_hierarchy': args.instruction_hierarchy,
         'lora_alpha': args.lora_alpha,
