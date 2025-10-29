@@ -7,7 +7,7 @@
 
 Prompt injection attacks pose a significant security threat to LLM-integrated applications. Model-level defenses have shown strong effectiveness, but are currently deployed into commercial-grade models in a closed-source manner. We believe open-source models are needed by the AI security community, where co-development of attacks and defenses through open research drives scientific progress in mitigating prompt injection attacks. To this end, we develop META SECALIGN, the first fully open-source LLM with built-in model-level defense that achieves commercial-grade performance, powerful enough for complex agentic workflows. We provide complete details of our training recipe, an improved version of the SOTA SecAlign defense. We perform the most comprehensive evaluation to date on 9 utility benchmarks and 7 security benchmarks on general knowledge, instruction following, and agentic workflows. Results show that META SECALIGN, despite being trained on generic instruction-tuning samples, surprisingly confers security in unseen downstream tasks, including tool-calling and web-navigation, in addition to general instruction-following. Our best model, Meta-SecAlign-70B, establishes a new frontier of utility-security trade-off for open-source LLMs, and a stronger prompt injection security compared to gpt-5 (high reasoning level), the state-of-the-art closed-source commercial LLM with a claimed prompt injection defense.
 
-# Updates (10/28/2025) — from the 1st-version Codebase (07/07/2025)
+# Updates (10/28/2025) — from the 07/07/2025 version
 + Report the combined attack success rate (a sample is counted as attacked if any tested attack method succeeds) for non-adaptive and adaptive (added) attacks; adaptive attacks use fake delimiters (similar to official ones) to mimic a fake conversation with the model.
 + Add support for evaluating GPT-5 on all benchmarks.
 + Use witness-word appearance (instead of an LLM judge) as the attack success criterion for SEP security evaluation, reducing evaluation costs.
@@ -48,8 +48,8 @@ Prompt injection attacks pose a significant security threat to LLM-integrated ap
         + `gpt-4o`: the follow-up flagship model, also with [prompt injection defense](https://openai.com/safety/evaluations-hub/).
         + `gpt-5`: the latest and most secure commercial model in our evaluation. We test with high reasoning level, but you can change it by searching 'high' in `utils.py`.
     + Google Gemini models
-        + `gemini-2.0-flash`: a Google commercial model with a claimed prompt injection defense
-        + `gemini-2.5-flash`: a Google commercial model with a claimed prompt injection defense
+        + `gemini-2.0-flash`: a Google commercial model with a [claimed prompt injection defense](https://arxiv.org/pdf/2505.14534)
+        + `gemini-2.5-flash`: a Google commercial model with a [claimed prompt injection defense](https://arxiv.org/pdf/2505.14534)
         + `gemini-2.0-pro`: a state-of-the-art Google model (not claimed to include a prompt injection defense)
         + `gemini-2.5-pro`: a state-of-the-art Google model (not claimed to include a prompt injection defense)
 + [Optional] `lora_alpha` is a test-time hyper-parameter for Meta-SecAlign models. It defaults to 8, which uses the exact Meta-SecAlign models as trained. A `lora_alpha` value between 0 and 8 interpolates between the undefended model and our defended model to enable a flexible utility–security trade-off. Extrapolating `lora_alpha` beyond 8 is possible but untested.
