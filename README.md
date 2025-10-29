@@ -1,5 +1,5 @@
 # Meta SecAlign: A Secure Foundation LLM Against Prompt Injection Attacks
-[Sizhe Chen](https://sizhe-chen.github.io)\*, [Arman Zharmagambetov](https://arman-z.github.io), [David Wagner](https://people.eecs.berkeley.edu/~daw), [Chuan Guo](https://sites.google.com/view/chuanguo)\* (*equal technical contributions*)
+[Sizhe Chen](https://sizhe-chen.github.io)\*, [Arman Zharmagambetov](https://arman-z.github.io), [David Wagner](https://people.eecs.berkeley.edu/~daw), [Chuan Guo](https://sites.google.com/view/chuanguo)\* (\* for equal technical contributions*)
 
 🔥 Meta-SecAlign models are now licensed for commercial use under the [Llama community licenses](https://www.llama.com/llama3_3/license), despite this codebase being licensed for non-commercial use only.
 
