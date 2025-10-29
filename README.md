@@ -1,7 +1,7 @@
 # Meta SecAlign: A Secure Foundation LLM Against Prompt Injection Attacks
 [Sizhe Chen](https://sizhe-chen.github.io)\*, [Arman Zharmagambetov](https://arman-z.github.io), [David Wagner](https://people.eecs.berkeley.edu/~daw), [Chuan Guo](https://sites.google.com/view/chuanguo)\* (*equal technical contributions*)
 
-🔥 Meta-SecAlign is now licensed for commercial use under the [Llama community licenses](https://www.llama.com/llama3_3/license).
+🔥 Meta-SecAlign models are now licensed for commercial use under the [Llama community licenses](https://www.llama.com/llama3_3/license), despite this codebase being licensed for non-commercial use only.
 
 [![](https://img.shields.io/badge/Paper-a8c66c)](https://arxiv.org/pdf/2507.02735) [![](https://img.shields.io/badge/Meta%20SecAlign-8B-FFD21E)](https://huggingface.co/facebook/Meta-SecAlign-8B) [![](https://img.shields.io/badge/Meta%20SecAlign-70B-FFD21E)](https://huggingface.co/facebook/Meta-SecAlign-70B) [![](https://img.shields.io/badge/Poster-1b6535)](https://drive.google.com/file/d/1JbbgKPQVQ-Pa5LVYWyR4Eo5ckNyrZiPw/view?usp=sharing) [![](https://img.shields.io/badge/Slides-f47a60)](https://drive.google.com/file/d/1Xy_njupWCAN56NMsQV22hD7uShg5oBP8/view?usp=sharing)
 
@@ -19,9 +19,9 @@ Prompt injection attacks pose a significant security threat to LLM-integrated ap
 + Hardware requirements: Meta-SecAlign-8B requires 4×80 GB A100s for training and one 16 GB GPU for evaluation. Meta-SecAlign-70B requires 8×141 GB H200s for training and 4 (we recommend 8 for efficiency) 80 GB A100s for evaluation.
 + Install [uv](https://docs.astral.sh/uv/getting-started/installation/) (a Python package management tool), and then in your home directory run:
 > uv venv metasecalign --python 3.13 \
-> source ~/metasecalign/bin/activate
+> source metasecalign/bin/activate
 + Install Meta-SecAlign package dependencies:
-> git clone --recurse-submodules git@github.com:facebookresearch/Meta_SecAlign.git \
+> git clone --recurse-submodules https://github.com/facebookresearch/Meta_SecAlign.git \
 > cd Meta_SecAlign \
 > uv pip install -r requirements.txt
 + Install Meta-SecAlign data dependencies (including those used for SEP utility evaluation if you have a GPU available):
@@ -68,4 +68,4 @@ Prompt injection attacks pose a significant security threat to LLM-integrated ap
 > bash secalign_llama3.3_70B.sh
 
 # Code Acknowledgements
-Significantly improved from [SecAlign](https://github.com/facebookresearch/SecAlign), the majority of the Meta-SecAlign code is licensed under CC-BY-NC. This means the codebase is for non-commercial use only, but the released models are licensed for commercial use under the [Llama community licenses](https://www.llama.com/llama3_3/license). Portions of the project are available under separate license terms: [AgentDojo](https://github.com/ethz-spylab/agentdojo), [TaskTracker](https://github.com/microsoft/TaskTracker), and [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) are licensed under MIT. Code from other repositories includes AgentDojo (agentdojo), TaskTracker (`setup.py`), and lm_eval_harness (`lm_eval_config`). This software and/or data was deposited in the BAIR Open Research Commons repository in 2025.
+Significantly improved from [SecAlign](https://github.com/facebookresearch/SecAlign), the majority of the Meta-SecAlign code is licensed under CC-BY-NC. Portions of the project are available under separate license terms: [AgentDojo](https://github.com/ethz-spylab/agentdojo), [TaskTracker](https://github.com/microsoft/TaskTracker), and [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) are licensed under MIT. Code from other repositories includes AgentDojo (agentdojo), TaskTracker (`setup.py`), and lm_eval_harness (`lm_eval_config`). This software and/or data was deposited in the BAIR Open Research Commons repository in 2025.

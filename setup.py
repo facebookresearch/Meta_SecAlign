@@ -13,6 +13,7 @@ import numpy as np
 import alpaca_eval
 import shutil
 import torchtune
+import time
 from utils import (
     jload, 
     jdump, 
@@ -62,6 +63,7 @@ if __name__ == "__main__":
     shutil.copy('helpers/_preference.py', torchtune_path + '/datasets/_preference.py')
     shutil.copy('helpers/agentdojo.patch', 'agentdojo/agentdojo.patch')
     os.system('cd agentdojo\ngit apply agentdojo.patch\nrm agentdojo.patch\ncd ..')
+    shutil.copy('helpers/tune', torchtune.__file__[:torchtune.__file__.find('/lib')] + '/bin/tune')
 
 
     # Delete built-in system prompt (not used in SecAlign training) in Llama-3 series tokenizer
@@ -183,6 +185,7 @@ if __name__ == "__main__":
     snapshot_download(repo_id='facebook/Meta-SecAlign-70B', local_dir='meta-llama/Llama-3.3-70B-Instruct_SecAlign')
     snapshot_download(repo_id='meta-llama/Llama-3.1-8B-Instruct', ignore_patterns="original/consolidated*")
     snapshot_download(repo_id='meta-llama/Llama-3.3-70B-Instruct', ignore_patterns="original/consolidated*")
+    snapshot_download(repo_id='meta-llama/Meta-Llama-3-8B-Instruct', ignore_patterns="original/consolidated*")
 
 
     # Process CySE dataset
@@ -221,6 +224,31 @@ if __name__ == "__main__":
         jdump(data_sft_format, dataset_out_name)
     else:
         print(dataset_out_name, 'already exists.')
+
+
+    # Generate SEP reference responses for evaluation
+    time.sleep(3)
+    dataset_out_name = 'data/SEP_dataset_test_Meta-Llama-3-8B-Instruct.json'
+    if not os.path.exists(dataset_out_name) and torch.cuda.device_count():
+        model, _ = load_vllm_model('meta-llama/Meta-Llama-3-8B-Instruct')
+        llm_input = form_llm_input(data_sft_format, none, tokenizer.apply_chat_template, instruction_hierarchy=True, defense='none')
+        print(llm_input[0])
+        outputs = test_model_output_vllm(llm_input, model, tokenizer)
+        data_reference = []
+        for i, d in enumerate(data_sft_format):
+            data_reference.append({
+                'instruction': d['instruction'] + '\n\n' + d['input'],
+                'input': d['input'],
+                'output': outputs[i],
+                'witness': d['witness'],
+                'injection': d['injection'],
+                'instruction_only': d['instruction'],
+                "generator": "meta-llama/Meta-Llama-3-8B-Instruct",
+            })
+        jdump(data_reference, dataset_out_name)
+    else:
+        if torch.cuda.device_count(): print(dataset_out_name, 'already exists.')
+        else: print('Skipping SEP reference response generation for SEP Utility evaluation due to no available GPUs.')
 
 
     # Process TaskTracker dataset following https://github.com/microsoft/TaskTracker/blob/main/task_tracker/dataset_creation/prepare_datasets_poisoned_test.ipynb
@@ -579,27 +607,3 @@ if __name__ == "__main__":
 
     else:
         print(dataset_out_name, 'already exists.')
-
-
-    # Generate SEP reference responses for evaluation
-    dataset_out_name = 'data/SEP_dataset_test_Meta-Llama-3-8B-Instruct.json'
-    if not os.path.exists(dataset_out_name) and torch.cuda.device_count():
-        model, _ = load_vllm_model('meta-llama/Meta-Llama-3-8B-Instruct')
-        llm_input = form_llm_input(data_sft_format, none, tokenizer.apply_chat_template, instruction_hierarchy=True, defense='none')
-        print(llm_input[0])
-        outputs = test_model_output_vllm(llm_input, model, tokenizer)
-        data_reference = []
-        for i, d in enumerate(data_sft_format):
-            data_reference.append({
-                'instruction': d['instruction'] + '\n\n' + d['input'],
-                'input': d['input'],
-                'output': outputs[i],
-                'witness': d['witness'],
-                'injection': d['injection'],
-                'instruction_only': d['instruction'],
-                "generator": "meta-llama/Meta-Llama-3-8B-Instruct",
-            })
-        jdump(data_reference, dataset_out_name)
-    else:
-        if torch.cuda.device_count(): print(dataset_out_name, 'already exists.')
-        else: print('Skipping SEP reference response generation for SEP Utility evaluation due to no available GPUs.')

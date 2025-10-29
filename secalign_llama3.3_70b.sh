@@ -12,7 +12,7 @@ export DATA_FILES="data/preference_${MODEL}_dpo_NaiveCompletion_${RANDPOS}${RESP
 export CACHE="~/.cache/huggingface/hub/models--meta-llama--Llama-3.3-70B-Instruct/snapshots/6f6073b423013f6a7d4d9f39144961bfbfbc386b"
 
 # Generate DATA_FILES, will be skipped if already exists
-python generate_data.py -m ${MODEL} --dataset alpaca --self_generated_response --random_inject_pos
+python generate_data.py -m meta-llama/${MODEL} --dataset alpaca --self_generated_response --random_inject_pos
 
 tune run --nproc_per_node 8 lora_dpo_distributed \
     --config helpers/llama3.3_70B_lora.yaml \

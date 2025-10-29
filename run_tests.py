@@ -32,6 +32,8 @@ for model_name_or_path in args.model_name_or_path:
             if 'gpt' in model_name_or_path or 'gemini' in model_name_or_path:
                 if 'test_lm_eval.py' in cmd: continue # test_lm_eval.py does not support gpt/gemini models
                 lora_alpha = -1
+            if 'Llama-3.1-8B' in model_name_or_path:
+                if 'test_agentdojo.py' in cmd: continue # test_agentdojo.py does not support Llama-3.1-8B models
             cmd = cmd.format(model_name_or_path=model_name_or_path, lora_alpha=lora_alpha)
             if '70B' in model_name_or_path: cmd += ' --tensor_parallel_size 4' # 70B models and Llama4 need at least tensor_parallel_size=8 for 80G GPUs
             actual_cmds.append(cmd)
