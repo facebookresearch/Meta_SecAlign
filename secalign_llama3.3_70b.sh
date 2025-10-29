@@ -4,20 +4,19 @@
 # LICENSE file in the root directory of this source tree.
 
 export MODEL="Llama-3.3-70B-Instruct"
-export DATASET="alpaca"
-export NUM_SAMPLES="-1"
 export RESPONSE="synthetic"
-export ATTACK="NaiveCompletion"
+export RANDPOS="randpos_"
 export LR="3.2e-4"
-export OUTPUT_DIR="meta-llama/${MODEL}_dpo_${ATTACK}_randpos_${RESPONSE}_${DATASET}_ns${NUM_SAMPLES}_bs256_${LR}_maxlength2048"
-export DATA_FILES="data/preference_${MODEL}_dpo_${ATTACK}_randpos_${RESPONSE}_${DATASET}.json"
+export OUTPUT_DIR="meta-llama/${MODEL}_dpo_NaiveCompletion_${RANDPOS}${RESPONSE}_alpaca_lr${LR}"
+export DATA_FILES="data/preference_${MODEL}_dpo_NaiveCompletion_${RANDPOS}${RESPONSE}_alpaca.json"
+export CACHE="~/.cache/huggingface/hub/models--meta-llama--Llama-3.3-70B-Instruct/snapshots/6f6073b423013f6a7d4d9f39144961bfbfbc386b"
 
-tune download meta-llama/Llama-3.3-70B-Instruct \
-    --output-dir meta-llama/Llama-3.3-70B-Instruct \
-    --ignore-patterns "original/consolidated*"
+# Generate DATA_FILES, will be skipped if already exists
+python generate_data.py -m ${MODEL} --dataset alpaca --self_generated_response --random_inject_pos
 
-torchrun --nproc_per_node 8 torchtune/recipes/lora_dpo_distributed.py \
-    --config llama3.3_70B_lora.yaml \
+tune run --nproc_per_node 8 lora_dpo_distributed \
+    --config helpers/llama3.3_70B_lora.yaml \
     output_dir=$OUTPUT_DIR \
     dataset.data_files=$DATA_FILES \
-    optimizer.lr=$LR
+    optimizer.lr=$LR \
+    cache_dir=${CACHE/#\~/$HOME}

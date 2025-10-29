@@ -14,12 +14,14 @@ args = parser.parse_args()
 args.run = args.norun
 
 cmds = [
-    'python test.py --attack none ignore completion completion_ignore --defense none --test_data data/davinci_003_outputs.json --lora_alpha {lora_alpha} -m {model_name_or_path}',
-    'python test.py --attack none ignore ignore_before --defense none --test_data data/SEP_dataset_test.json --lora_alpha {lora_alpha} -m {model_name_or_path}',
-    'python test.py --attack straightforward --defense none --test_data data/CySE_prompt_injections.json --lora_alpha {lora_alpha} -m {model_name_or_path}',
-    'python test.py --attack straightforward --defense none --test_data data/TaskTracker_dataset_test.json --lora_alpha {lora_alpha} -m {model_name_or_path}',
-    'python test_injecagent.py --defense sandwich --lora_alpha {lora_alpha} -m {model_name_or_path}',
+    'python test.py --attack none straightforward straightforward_before ignore ignore_before completion completion_ignore completion_llama33_70B completion_ignore_llama33_70B --defense none --test_data data/davinci_003_outputs.json --lora_alpha {lora_alpha} -m {model_name_or_path}',
+    #'python test.py --attack straightforward --defense none --test_data data/CySE_prompt_injections.json --lora_alpha {lora_alpha} -m {model_name_or_path}',
+    'python test.py --attack none straightforward straightforward_before ignore ignore_before completion completion_ignore completion_llama33_70B completion_ignore_llama33_70B --defense none --test_data data/SEP_dataset_test.json --lora_alpha {lora_alpha} -m {model_name_or_path}', # none
     'python test_lm_eval.py --lora_alpha {lora_alpha} -m {model_name_or_path}',
+    'python test_agentdojo.py -a important_instructions -d repeat_user_prompt -m {model_name_or_path} --lora_alpha {lora_alpha}',
+    'python test_injecagent.py --defense sandwich --lora_alpha {lora_alpha} -m {model_name_or_path}',
+    #'python test_injecagent.py --defense none --lora_alpha {lora_alpha} -m {model_name_or_path}',
+    'python test.py --attack straightforward --defense none --test_data data/TaskTracker_dataset_test.json --lora_alpha {lora_alpha} -m {model_name_or_path}',
 ]
 
 
@@ -31,7 +33,7 @@ for model_name_or_path in args.model_name_or_path:
                 if 'test_lm_eval.py' in cmd: continue # test_lm_eval.py does not support gpt/gemini models
                 lora_alpha = -1
             cmd = cmd.format(model_name_or_path=model_name_or_path, lora_alpha=lora_alpha)
-            if '70B' in model_name_or_path: cmd += ' --tensor_parallel_size 4' # 70B models need tensor_parallel_size=4 for 80G GPUs
+            if '70B' in model_name_or_path: cmd += ' --tensor_parallel_size 4' # 70B models and Llama4 need at least tensor_parallel_size=8 for 80G GPUs
             actual_cmds.append(cmd)
 
 for cmd in actual_cmds: print(cmd + '\n')

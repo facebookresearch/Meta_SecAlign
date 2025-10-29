@@ -512,7 +512,7 @@ def main(params, model, tokenizer):
         if 'gpt' in params['model_name_or_path'] or 'gemini' in params['model_name_or_path']:
             predict_func = predict_gpt if 'gpt' in params['model_name_or_path'] else predict_gemini
             outputs_all = test_model_output_client(form_llm_input_client(
-                save_list_first_time, injection_method=none, defense='none'), params['model_name_or_path'], params['instruction_hierarchy'], model, predict_func)[2]
+                save_list_first_time, injection_method=none, defense='none'), params['model_name_or_path'], params['instruction_hierarchy'], model, predict_func)#[2]
         else: outputs_all = test_model_output_vllm(llm_input, model, tokenizer, params['model_name_or_path'] if base_model_path != params['model_name_or_path'] else None, lora_alpha=params['lora_alpha'])
         for i, output in enumerate(outputs_all): save_list_first_time[i]['output'] = output
         jdump(save_list_first_time, first_step_prediction_file)
@@ -551,7 +551,7 @@ def main(params, model, tokenizer):
                 if 'gpt' in params['model_name_or_path'] or 'gemini' in params['model_name_or_path']:
                     predict_func = predict_gpt if 'gpt' in params['model_name_or_path'] else predict_gemini
                     outputs_second_step = test_model_output_client(form_llm_input_client(
-                        save_list_second_step, injection_method=none, defense='none'), params['model_name_or_path'], params['instruction_hierarchy'], model, predict_func)[2]
+                        save_list_second_step, injection_method=none, defense='none'), params['model_name_or_path'], params['instruction_hierarchy'], model, predict_func)#[2]
                 else: outputs_second_step = test_model_output_vllm(llm_input_second_step, model, tokenizer, params['model_name_or_path'] if base_model_path != params['model_name_or_path'] else None, lora_alpha=params['lora_alpha'])
                 for i, item in enumerate(items_second_step):
                     #if parsed_output['eval'] != 'succ': continue
@@ -585,5 +585,5 @@ if __name__ == "__main__":
         if 'gpt' in params['model_name_or_path']: model = load_gpt_model(params["openai_config_path"], params['model_name_or_path'], api_key_index=0)
         elif 'gemini' in params['model_name_or_path']: model = load_gemini_model(params['gemini_config_path'])
         else: model, tokenizer = load_vllm_model(params['model_name_or_path'], tensor_parallel_size=params['tensor_parallel_size'])
-        for args.setting in ['enhanced', 'base']: main(params, model, tokenizer)
+        main(params, model, tokenizer)
         del model
