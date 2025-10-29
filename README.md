@@ -41,7 +41,7 @@ Prompt injection attacks pose a significant security threat to LLM-integrated ap
         + `meta-llama/Llama-3.1-8B-Instruct_SecAlign` ([Meta-SecAlign-8B](https://huggingface.co/facebook/Meta-SecAlign-8B) downloaded by `setup.py`): the first fully open model with state-of-the-art prompt injection defense
         + `meta-llama/Llama-3.3-70B-Instruct_SecAlign` ([Meta-SecAlign-70B](https://huggingface.co/facebook/Meta-SecAlign-70B) downloaded by `setup.py`): the first fully open model with state-of-the-art prompt injection defense
         + `meta-llama/Llama-3.1-8B-Instruct`
-        + `meta-llama/Llama-3.3-70B-Instruct_SecAlign`
+        + `meta-llama/Llama-3.3-70B-Instruct`
         + Other Hugging Face open-weight models may also be natively supported.
     + OpenAI GPT models
         + `gpt-4o-mini`: the [first commercial model](https://openai.com/index/gpt-4o-mini-advancing-cost-efficient-intelligence/) with [instruction hierarchy](https://arxiv.org/pdf/2404.13208) prompt injection defense.
