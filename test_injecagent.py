@@ -582,7 +582,7 @@ if __name__ == "__main__":
     params = args.__dict__
     for args.model_name_or_path in args.model_name_or_path:
         tokenizer = None
-        if 'gpt' in params['model_name_or_path']: model = load_gpt_model(params["openai_config_path"], params['model_name_or_path'], api_key_index=0)
+        if 'gpt' in params['model_name_or_path']: model = load_gpt_model(params["openai_config_path"], params['model_name_or_path'], api_key_index=0, reasoning_effort=params['gpt5_reasoning_effort'])
         elif 'gemini' in params['model_name_or_path']: model = load_gemini_model(params['gemini_config_path'])
         else: model, tokenizer = load_vllm_model(params['model_name_or_path'], tensor_parallel_size=params['tensor_parallel_size'])
         main(params, model, tokenizer)

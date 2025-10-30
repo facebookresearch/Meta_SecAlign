@@ -264,7 +264,7 @@ def test_vllm(args):
 
 def test_client(args):
     if 'gpt' in args.model_name_or_path:
-        client = load_gpt_model(args.openai_config_path, args.model_name_or_path, api_key_index=0)
+        client = load_gpt_model(args.openai_config_path, args.model_name_or_path, api_key_index=0, reasoning_effort=args.gpt5_reasoning_effort)
         predict_func = predict_gpt
     elif 'gemini' in args.model_name_or_path:
         client = load_gemini_model(args.gemini_config_path)

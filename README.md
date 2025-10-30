@@ -46,7 +46,7 @@ Comparable to GPT-5-high in agentic (tool/web) utility and security, Meta-SecAli
     + OpenAI GPT models
         + `gpt-4o-mini`: the [first commercial model](https://openai.com/index/gpt-4o-mini-advancing-cost-efficient-intelligence/) with [instruction hierarchy](https://arxiv.org/pdf/2404.13208) prompt injection defense.
         + `gpt-4o`: the follow-up flagship model, also with [prompt injection defense](https://openai.com/safety/evaluations-hub/).
-        + `gpt-5`: the latest and most secure commercial model in our evaluation. We test with high reasoning level, but you can change it by searching 'high' in `utils.py`.
+        + `gpt-5`: the latest and most secure commercial model in our evaluation. 
     + Google Gemini models
         + `gemini-2.0-flash`: a Google commercial model with a [claimed prompt injection defense](https://arxiv.org/pdf/2505.14534)
         + `gemini-2.5-flash`: a Google commercial model with a [claimed prompt injection defense](https://arxiv.org/pdf/2505.14534)

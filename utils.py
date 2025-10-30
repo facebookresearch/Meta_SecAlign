@@ -157,6 +157,7 @@ def test_parser():
     parser.add_argument("--tensor_parallel_size", type=int, default=1)
     parser.add_argument("--lora_alpha", type=float, default=8.0)
     parser.add_argument("--no_instruction_hierarchy", action='store_false', default=True)
+    parser.add_argument('--gpt5_reasoning_effort', type=str, default='high', help='Reasoning effort level for GPT-5 models: minimal/medium/high', choices=['minimal', 'medium', 'high'])
     parser.add_argument("--delay_hour", type=float, default=0)
     parser.add_argument("--sample_ids", type=int, nargs="+", default=None, help='Sample ids to test in GCG, None for testing all samples')
     parser.add_argument('--log', default=False, action='store_true', help='Log gcg/advp results')
@@ -211,7 +212,7 @@ def load_vllm_model_with_changed_lora_alpha(model_name_or_path, lora_alpha):
     return model_name_or_path_changed_lora_alpha
 
 
-def load_gpt_model(openai_config_path, model_name, api_key_index=0):
+def load_gpt_model(openai_config_path, model_name, api_key_index=0, reasoning_effort='high'):
     with open(openai_config_path, 'r') as file: config = yaml.safe_load(file)['default']
     usable_keys = []
     for item in config:
@@ -222,8 +223,9 @@ def load_gpt_model(openai_config_path, model_name, api_key_index=0):
     #print('\nUsing key', api_key_index, ':', usable_keys[api_key_index])
     client_class = usable_keys[api_key_index]['client_class']
     del usable_keys[api_key_index]['client_class']
-    return eval(client_class)(**usable_keys[api_key_index])
-
+    client = eval(client_class)(**usable_keys[api_key_index])
+    client.reasoning_effort = reasoning_effort
+    return client
 
 def load_gemini_model(gemini_config_path):
     with open(gemini_config_path, 'r') as file: config = yaml.safe_load(file)['default']
