@@ -14,7 +14,7 @@ import nltk
 nltk.download('punkt_tab')
 from utils import jdump, summary_results, load_vllm_model_with_changed_lora_alpha
 os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
-TASKS = ['meta_gpqa_cot', 'meta_ifeval', 'meta_bbh', 'meta_mmlu_0shot_instruct', 'meta_mmlu_pro_instruct'] # 'meta_ifeval', 'ifbench', 
+TASKS = ['meta_gpqa_cot', 'meta_ifeval', 'meta_bbh', 'meta_mmlu_0shot_instruct', 'meta_mmlu_pro_instruct'] # 'ifbench', 
 
 def main(args):
     if os.path.exists(args.model_name_or_path): log_dir = args.model_name_or_path
@@ -88,7 +88,6 @@ if __name__ == "__main__":
     parser.add_argument("--lora_alpha", type=float, default=8.0)
     parser.add_argument("--delay_hour", type=float, default=0)
     args = parser.parse_args()
-    #args.tensor_parallel_size = 4 if '70B' in args.model_name_or_path else 1
     args.data_parallel_size = int(torch.cuda.device_count() / args.tensor_parallel_size)
     time.sleep(args.delay_hour * 3600)
     main(args)

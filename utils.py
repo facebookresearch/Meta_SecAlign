@@ -47,20 +47,16 @@ def jdump(obj, f, mode="w", indent=4, default=str):
 
 
 def generate_preference_dataset(
-        model_name_or_path, 
-        instruct_dataset="alpaca",  # "alpaca" or "natural"
-        self_generated_response=True,  # Whether to use self-generated responses or (bad) ground truth responses
-        random_inject_pos=True,  # Randomize the position of the injected prompt
+        preference_data_path, 
+        instruct_dataset,  # "alpaca" or "natural"
+        self_generated_response,  # Whether to use self-generated responses or (bad) ground truth responses
+        randomized_injection_position,  # Randomize the position of the injected prompt
+        model_name_or_path # model for generating self-generated responses
     ):
-    preference_data_path = 'data/preference_' + model_name_or_path.split('/')[1] + '_dpo_NaiveCompletion'
-    if random_inject_pos:
-        preference_data_path += '_randpos'
-    preference_data_path += '_synthetic' if self_generated_response else '_real'
-    preference_data_path += '_' + instruct_dataset + '.json'
-    print('Generating', preference_data_path)
     if os.path.exists(preference_data_path):
         print(preference_data_path, 'already exists.')
         return load_dataset('json', data_files=preference_data_path, split='train')
+    print('Generating', preference_data_path)
 
     if instruct_dataset == "alpaca":    clean_data = load_dataset("yahma/alpaca-cleaned")['train']
     elif instruct_dataset == "natural": clean_data = load_dataset("Muennighoff/natural-instructions", data_dir='train')['train']
@@ -86,7 +82,7 @@ def generate_preference_dataset(
         injected_prompt = injected_sample['instruction'] + ' ' + injected_sample['input']
         
         if np.random.rand() < 0.9:  # 90% Straightforward Attack, 10% Completion Attack
-            current_sample['input'] = injected_prompt + ' ' + current_sample['input'] if (np.random.rand() < 0.5 and random_inject_pos) else current_sample['input'] + ' ' + injected_prompt
+            current_sample['input'] = injected_prompt + ' ' + current_sample['input'] if (np.random.rand() < 0.5 and randomized_injection_position) else current_sample['input'] + ' ' + injected_prompt
         else: 
             fake_response = ref_inst_resp.get(current_sample['instruction'], current_sample['output'])
             current_sample['input'] += '\n\n' + create_injection_for_completion(fake_response, injected_sample['instruction'], injected_sample['input'])
@@ -156,14 +152,13 @@ def test_parser():
     parser.add_argument('--gemini_config_path', type=str, default='data/gemini_configs.yaml')
     parser.add_argument("--tensor_parallel_size", type=int, default=1)
     parser.add_argument("--lora_alpha", type=float, default=8.0)
-    parser.add_argument("--no_instruction_hierarchy", action='store_false', default=True)
+    parser.add_argument("--no_instruction_hierarchy", action='store_false', default=True, dest='instruction_hierarchy')
     parser.add_argument('--gpt5_reasoning_effort', type=str, default='high', help='Reasoning effort level for GPT-5 models: minimal/medium/high', choices=['minimal', 'medium', 'high'])
     parser.add_argument("--delay_hour", type=float, default=0)
     parser.add_argument("--sample_ids", type=int, nargs="+", default=None, help='Sample ids to test in GCG, None for testing all samples')
     parser.add_argument('--log', default=False, action='store_true', help='Log gcg/advp results')
     parser.add_argument('--eval', default=False, action='store_true', help='Eval advp suffixes')
     args = parser.parse_args()
-    args.instruction_hierarchy = args.no_instruction_hierarchy
     time.sleep(args.delay_hour * 3600)
     return args
 

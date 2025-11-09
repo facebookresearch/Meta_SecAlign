@@ -58,8 +58,8 @@ for model_name_or_path in args.model_name_or_path:
                 os.environ['AZURE_API_VERSION'] = usable_keys[0]['api_version']
         elif 'gemini' in model_name_or_path:
             with open(args.gemini_config_path, 'r') as file: config = yaml.safe_load(file)['default']
-            usable_key = {'api_key': config[1]['api_key']}
-            os.environ['GOOGLE_API_KEY'] = args.google_api_key
+            #usable_key = {'api_key': config[1]['api_key']}
+            os.environ['GOOGLE_API_KEY'] = config[1]['api_key']
 
 
     if args.defense != 'none': cmd += ' --defense %s' % args.defense
@@ -70,4 +70,4 @@ for model_name_or_path in args.model_name_or_path:
         print('Error occurred:', e)
         break
     if len(pids): os.system('kill -9 %s' % ' '.join(set(pids)))
-    #os.kill(process.pid, signal.SIGKILL)
+    

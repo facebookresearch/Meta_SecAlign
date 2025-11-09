@@ -5,15 +5,7 @@
 
 [![](https://img.shields.io/badge/Paper-a8c66c)](https://arxiv.org/pdf/2507.02735) [![](https://img.shields.io/badge/Meta%20SecAlign-8B-FFD21E)](https://huggingface.co/facebook/Meta-SecAlign-8B) [![](https://img.shields.io/badge/Meta%20SecAlign-70B-FFD21E)](https://huggingface.co/facebook/Meta-SecAlign-70B) [![](https://img.shields.io/badge/Poster-1b6535)](https://drive.google.com/file/d/1JbbgKPQVQ-Pa5LVYWyR4Eo5ckNyrZiPw/view?usp=sharing) [![](https://img.shields.io/badge/Slides-f47a60)](https://drive.google.com/file/d/1Xy_njupWCAN56NMsQV22hD7uShg5oBP8/view?usp=sharing)
 
-Comparable to GPT-5-high in agentic (tool/web) utility and security, Meta-SecAlign-70B is the first fully open-source LLM with built-in prompt injection defense and commercial-grade performance, unlocking open research on secure agentic applications.
-
-# Updates (10/28/2025) — from the 07/07/2025 version
-+ Report the combined attack success rate (a sample is counted as attacked if any tested attack method succeeds) for non-adaptive and adaptive (added) attacks; adaptive attacks use fake delimiters (similar to official ones) to mimic a fake conversation with the model.
-+ Add support for evaluating GPT-5 on all benchmarks.
-+ Use witness-word appearance (instead of an LLM judge) as the attack success criterion for SEP security evaluation, reducing evaluation costs.
-+ Parallelize LLM-judge queries to accelerate TaskTracker evaluation.
-+ Fix multiple evaluation bugs that produced incorrect numbers.
-+ Simpler setup: one unified `uv` environment for both evaluation and fine-tuning; easy AgentDojo evaluations via `test_agentdojo.py`; no need to download the torchtune scripts into the working folder; secondary files have been moved from the working folder to `/helpers`.
+Comparable to GPT-5-high in agentic (tool/web) utility and security, Meta-SecAlign-70B is the first fully open-source LLM with built-in prompt injection defense and commercial-grade performance, unlocking open research on secure agentic applications (downloaded 10K times in 3 months).
 
 # Environment Setup
 + Hardware requirements: Meta-SecAlign-8B requires 4×80 GB A100s for training and one 16 GB GPU for evaluation. Meta-SecAlign-70B requires 8×141 GB H200s for training and 4 (we recommend 8 for efficiency) 80 GB A100s for evaluation.
@@ -24,6 +16,7 @@ Comparable to GPT-5-high in agentic (tool/web) utility and security, Meta-SecAli
 > git clone --recurse-submodules https://github.com/facebookresearch/Meta_SecAlign.git \
 > cd Meta_SecAlign \
 > uv pip install -r requirements.txt
+> uv pip install torchtune==0.6.0 --index-url https://download.pytorch.org/whl/cu126
 + Install Meta-SecAlign data dependencies (including those used for SEP utility evaluation if you have a GPU available):
 > python setup.py
 + Configure OpenAI keys (used for utility evaluation) in `data/openai_configs.yaml`. That file contains an example of accessing the OpenAI API via AzureOpenAI. A more detailed example is available [here](https://raw.githubusercontent.com/tatsu-lab/alpaca_eval/refs/heads/main/client_configs/openai_configs_example.yaml).
@@ -46,7 +39,7 @@ Comparable to GPT-5-high in agentic (tool/web) utility and security, Meta-SecAli
     + OpenAI GPT models
         + `gpt-4o-mini`: the [first commercial model](https://openai.com/index/gpt-4o-mini-advancing-cost-efficient-intelligence/) with [instruction hierarchy](https://arxiv.org/pdf/2404.13208) prompt injection defense.
         + `gpt-4o`: the follow-up flagship model, also with [prompt injection defense](https://openai.com/safety/evaluations-hub/).
-        + `gpt-5`: the latest and most secure commercial model in our evaluation. 
+        + `gpt-5`: the latest and most secure commercial model in our evaluation; change reasoning levels by specifying `--gpt5_reasoning_effort` (default to `high`). 
     + Google Gemini models
         + `gemini-2.0-flash`: a Google commercial model with a [claimed prompt injection defense](https://arxiv.org/pdf/2505.14534)
         + `gemini-2.5-flash`: a Google commercial model with a [claimed prompt injection defense](https://arxiv.org/pdf/2505.14534)
@@ -63,9 +56,8 @@ Comparable to GPT-5-high in agentic (tool/web) utility and security, Meta-SecAli
     + agentic tool-calling: [AgentDojo](https://arxiv.org/pdf/2406.13352)
 
 # Defensive Fine-Tuning (SecAlign++)
-+ `secalign_llama3.1_8b.sh` and `secalign_llama3.3_70b.sh` provide commands to defensively fine-tune `meta-llama/Llama-3.1-8B-Instruct` and `meta-llama/Llama-3.3-70B-Instruct` to a robust LoRA model using our training recipe.
-> bash secalign_llama3.1_8B.sh \
-> bash secalign_llama3.3_70B.sh
++ `secalign_plus_plus.py` provide commands to defensive-fine-tune `meta-llama/Llama-3.1-8B-Instruct` (default) or `meta-llama/Llama-3.3-70B-Instruct` (uncomment the specific line to fine-tune it) to a robust LoRA model using our training recipe, SecAlign++.
+> python secalign_plus_plus.py
 
 # Code Acknowledgements
 Significantly improved from [SecAlign](https://github.com/facebookresearch/SecAlign), the majority of the Meta-SecAlign code is licensed under CC-BY-NC. Portions of the project are available under separate license terms: [AgentDojo](https://github.com/ethz-spylab/agentdojo), [TaskTracker](https://github.com/microsoft/TaskTracker), and [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) are licensed under MIT. Code from other repositories includes AgentDojo (agentdojo), TaskTracker (`setup.py`), and lm_eval_harness (`lm_eval_config`). This software and/or data was deposited in the BAIR Open Research Commons repository in 2025.

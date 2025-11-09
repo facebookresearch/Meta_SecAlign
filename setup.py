@@ -61,9 +61,9 @@ if __name__ == "__main__":
     with open(alpaca_path + '/annotators/base.py', 'w') as f: f.write(base_code.replace('chunksize: Optional[int] = 128', 'chunksize: Optional[int] = 10000')) # disable caching during running to greatly avoid trailing data error in parallel testing
     torchtune_path = os.path.dirname(torchtune.__file__)
     shutil.copy('helpers/_preference.py', torchtune_path + '/datasets/_preference.py')
+    #shutil.copy('helpers/tune', torchtune.__file__[:torchtune.__file__.find('/lib')] + '/bin/tune')
     shutil.copy('helpers/agentdojo.patch', 'agentdojo/agentdojo.patch')
     os.system('cd agentdojo\ngit apply agentdojo.patch\nrm agentdojo.patch\ncd ..')
-    shutil.copy('helpers/tune', torchtune.__file__[:torchtune.__file__.find('/lib')] + '/bin/tune')
 
 
     # Delete built-in system prompt (not used in SecAlign training) in Llama-3 series tokenizer
