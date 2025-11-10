@@ -15,7 +15,7 @@ Comparable to GPT-5-high in agentic (tool/web) utility and security, Meta-SecAli
 + Install Meta-SecAlign package dependencies:
 > git clone --recurse-submodules https://github.com/facebookresearch/Meta_SecAlign.git \
 > cd Meta_SecAlign \
-> uv pip install -r requirements.txt
+> uv pip install -r requirements.txt \
 > uv pip install torchtune==0.6.0 --index-url https://download.pytorch.org/whl/cu126
 + Install Meta-SecAlign data dependencies (including those used for SEP utility evaluation if you have a GPU available):
 > python setup.py
