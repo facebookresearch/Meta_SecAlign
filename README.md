@@ -53,7 +53,7 @@ Comparable to GPT-5-high in agentic (tool/web) utility and security, Meta-SecAli
     + 8 utility benchmarks
         + general knowledge (from [lm_eval](https://github.com/EleutherAI/lm-evaluation-harness)): [MMLU](https://arxiv.org/pdf/2009.03300), [MMLU-Pro](https://arxiv.org/pdf/2406.01574), [BBH](https://arxiv.org/pdf/2210.09261), [IFEval](https://arxiv.org/pdf/2311.07911), [GPQA Diamond](https://arxiv.org/pdf/2311.12022)
         + instruction following: [AlpacaEval2](https://arxiv.org/pdf/2404.04475), [SEP](https://arxiv.org/pdf/2403.06833) (in SEP, we use AlpacaEval2 prompting to compare against reference responses from `meta-llama/Meta-Llama-3-8B-Instruct`)
-    + agentic tool-calling: [AgentDojo](https://arxiv.org/pdf/2406.13352)
+        + agentic tool-calling: [AgentDojo](https://arxiv.org/pdf/2406.13352)
 
 # Defensive Fine-Tuning (SecAlign++)
 + `secalign_plus_plus.py` provide commands to defensive-fine-tune `meta-llama/Llama-3.1-8B-Instruct` (default) or `meta-llama/Llama-3.3-70B-Instruct` (uncomment the specific line to fine-tune it) to a robust LoRA model using our training recipe, SecAlign++.
