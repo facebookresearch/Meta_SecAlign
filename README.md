@@ -9,12 +9,12 @@ Comparable to GPT-5-high in agentic (tool/web) utility and security, Meta-SecAli
 
 # Environment Setup
 + Hardware requirements: Meta-SecAlign-8B requires 4×80 GB A100s for training and one 16 GB GPU for evaluation. Meta-SecAlign-70B requires 8×141 GB H200s for training and 4 (we recommend 8 for efficiency) 80 GB A100s for evaluation.
-+ Install [uv](https://docs.astral.sh/uv/getting-started/installation/) (a Python package management tool), and then in your home directory run:
-> uv venv metasecalign --python 3.13 \
-> source metasecalign/bin/activate
++ Install [uv](https://docs.astral.sh/uv/getting-started/installation/) (a Python package management tool).
 + Install Meta-SecAlign package dependencies:
 > git clone --recurse-submodules https://github.com/facebookresearch/Meta_SecAlign.git \
 > cd Meta_SecAlign \
+> uv venv metasecalign --python 3.13 \
+> source metasecalign/bin/activate \
 > uv pip install -r requirements.txt \
 > uv pip install torchtune==0.6.0 --index-url https://download.pytorch.org/whl/cu126
 + Install Meta-SecAlign data dependencies (including those used for SEP utility evaluation if you have a GPU available):
@@ -43,8 +43,9 @@ Comparable to GPT-5-high in agentic (tool/web) utility and security, Meta-SecAli
     + Google Gemini models
         + `gemini-2.0-flash`: a Google commercial model with a [claimed prompt injection defense](https://arxiv.org/pdf/2505.14534)
         + `gemini-2.5-flash`: a Google commercial model with a [claimed prompt injection defense](https://arxiv.org/pdf/2505.14534)
-        + `gemini-2.0-pro`: a state-of-the-art Google model (not claimed to include a prompt injection defense)
-        + `gemini-2.5-pro`: a state-of-the-art Google model (not claimed to include a prompt injection defense)
+        + `gemini-2.0-pro`: a flagship Google model (not claimed to include a prompt injection defense)
+        + `gemini-2.5-pro`: a flagship Google model (not claimed to include a prompt injection defense)
+        + `gemini-3-pro-preview`: the state-of-the-art Google model with strong prompt injection defense
 + [Optional] `lora_alpha` is a test-time hyper-parameter for Meta-SecAlign models. It defaults to 8, which uses the exact Meta-SecAlign models as trained. A `lora_alpha` value between 0 and 8 interpolates between the undefended model and our defended model to enable a flexible utility–security trade-off. Extrapolating `lora_alpha` beyond 8 is possible but untested.
 + We support the following prompt-injection benchmark evaluations for the community:
     + 6 security benchmarks
