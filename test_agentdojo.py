@@ -11,20 +11,23 @@ import time
 from utils import test_parser, load_vllm_model_with_changed_lora_alpha
 
 args = test_parser()
-if args.defense != 'repeat_user_prompt' or 'important_instructions' not in args.attack:
-    print('Warning: not using attack=important_instructions with defense=repeat_user_prompt as in Meta-SecAlign paper.')
+if args.defense != 'repeat_user_prompt' or ('important_instructions' not in args.attack and 'none' not in args.attack):
+    print('Warning: not using attack=important_instructions/none with defense=repeat_user_prompt as in Meta-SecAlign paper.')
 
 for model_name_or_path in args.model_name_or_path:
-    log_dir = 'agentdojo/runs/' + model_name_or_path
-    os.makedirs(log_dir, exist_ok=True)
     if 'gpt' not in model_name_or_path and 'gemini' not in model_name_or_path:
         base_model_path = model_name_or_path.split('_')[0]
-        cmd = 'vllm serve %s --dtype auto --host 0.0.0.0 --tensor-parallel-size 4 --max-model-len 24576' % base_model_path # --max-model-len 16384
+        cmd = 'vllm serve %s --dtype auto --host 0.0.0.0 --tensor-parallel-size %d --max-model-len 24576' % (base_model_path, args.tensor_parallel_size) # --max-model-len 16384
         if '_' in model_name_or_path: # Evaluating defensive-fine-tuned LoRA model
             model_name_or_path = load_vllm_model_with_changed_lora_alpha(model_name_or_path, args.lora_alpha)
             cmd += ' --enable-lora --max-lora-rank 64 --lora-modules %s=%s' % (model_name_or_path, model_name_or_path)
-        server_log = 'agentdojo/runs/' + model_name_or_path + '/vllm_server_%s.out' % datetime.now().strftime('%Y%m%d_%H%M%S')
-        os.system('nohup ' + cmd + ' > ' + server_log + ' 2>&1 &')
+        log_dir = model_name_or_path
+        if not os.path.exists(log_dir): log_dir += '-log'
+        os.makedirs(log_dir, exist_ok=True)
+        server_log = log_dir + '/vllm_server_%s.out' % datetime.now().strftime('%Y%m%d_%H%M%S')
+        cmd = 'nohup ' + cmd + ' > ' + server_log + ' 2>&1 &'
+        #print(cmd)
+        os.system(cmd)
         #with open(server_log, 'a') as out: process = subprocess.Popen(cmd.split(' '), stdout=out, stderr=out, preexec_fn=os.setpgrp, shell=False)
         time.sleep(30)
 
@@ -36,8 +39,11 @@ for model_name_or_path in args.model_name_or_path:
             print('Waiting another 30s for vLLM server to start...')
             time.sleep(30)
         print('Evaluating AgentDojo on', model_name_or_path, 'with attacks', args.attack, 'and defense', args.defense, end='\n\n\n')
-        cmd = "cd agentdojo/src\npython -m agentdojo.scripts.benchmark --model local --logdir %s --model-id %s --tool-delimiter input" % (log_dir, model_name_or_path)
+        cmd = "cd agentdojo/src\npython -m agentdojo.scripts.benchmark --model local --logdir %s --model-id %s --tool-delimiter input" % (log_dir, model_name_or_path) 
     else:
+        #log_dir = 'agentdojo/runs/' + model_name_or_path
+        log_dir = model_name_or_path + '-log'
+        os.makedirs(log_dir, exist_ok=True)
         cmd = "cd agentdojo/src\npython -m agentdojo.scripts.benchmark --model %s --logdir %s" % (model_name_or_path, log_dir)
         if 'gpt-5' in model_name_or_path: cmd += ' --reasoning-effort %s' % args.gpt5_reasoning_effort
         pids = []
@@ -65,7 +71,8 @@ for model_name_or_path in args.model_name_or_path:
     if args.defense != 'none': cmd += ' --defense %s' % args.defense
     try:
         for attack in args.attack: 
-            os.system(cmd + ' --attack %s' % attack)
+            if attack == 'none': os.system(cmd)
+            else: os.system(cmd + ' --attack %s' % attack)
     except Exception as e:
         print('Error occurred:', e)
         break

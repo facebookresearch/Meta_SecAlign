@@ -16,8 +16,9 @@ args.run = args.norun
 cmds = [
     'python test.py --attack none straightforward straightforward_before ignore ignore_before completion completion_ignore completion_llama33_70B completion_ignore_llama33_70B --defense none --test_data data/davinci_003_outputs.json --lora_alpha {lora_alpha} -m {model_name_or_path}',
     #'python test.py --attack straightforward --defense none --test_data data/CySE_prompt_injections.json --lora_alpha {lora_alpha} -m {model_name_or_path}',
-    'python test.py --attack none straightforward straightforward_before ignore ignore_before completion completion_ignore completion_llama33_70B completion_ignore_llama33_70B --defense none --test_data data/SEP_dataset_test.json --lora_alpha {lora_alpha} -m {model_name_or_path}', # none
+    'python test.py --attack none straightforward straightforward_before ignore ignore_before completion completion_ignore completion_llama33_70B completion_ignore_llama33_70B --defense none --test_data data/SEP_dataset_test.json --lora_alpha {lora_alpha} -m {model_name_or_path}',
     'python test_lm_eval.py --lora_alpha {lora_alpha} -m {model_name_or_path}',
+    'python test_agentdojo.py -a none -d repeat_user_prompt -m {model_name_or_path} --lora_alpha {lora_alpha}',
     'python test_agentdojo.py -a important_instructions -d repeat_user_prompt -m {model_name_or_path} --lora_alpha {lora_alpha}',
     'python test_injecagent.py --defense sandwich --lora_alpha {lora_alpha} -m {model_name_or_path}',
     #'python test_injecagent.py --defense none --lora_alpha {lora_alpha} -m {model_name_or_path}',
@@ -32,6 +33,8 @@ for model_name_or_path in args.model_name_or_path:
             if 'gpt' in model_name_or_path or 'gemini' in model_name_or_path:
                 if 'test_lm_eval.py' in cmd: continue # test_lm_eval.py does not support gpt/gemini models
                 lora_alpha = -1
+                #cmd = cmd.replace('completion_llama33_70B completion_ignore_llama33_70B', '')
+                cmd = cmd.replace('completion_qwen3_4B completion_ignore_qwen3_4B', '')
             if 'Llama-3.1-8B' in model_name_or_path:
                 if 'test_agentdojo.py' in cmd: continue # test_agentdojo.py does not support Llama-3.1-8B models
             cmd = cmd.format(model_name_or_path=model_name_or_path, lora_alpha=lora_alpha)
