@@ -1,7 +1,7 @@
 absl-py==2.3.1
 accelerate==1.10.1
 aiohappyeyeballs==2.6.1
-aiohttp==3.13.1
+aiohttp==3.13.3
 aiosignal==1.4.0
 alpaca-eval==0.6.6
 annotated-doc==0.0.3
