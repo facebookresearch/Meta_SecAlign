@@ -247,7 +247,7 @@ typing-extensions==4.15.0
 typing-inspection==0.4.2
 tyro==0.9.1
 tzdata==2025.2
-urllib3==2.5.0
+urllib3==2.6.3
 uvicorn==0.38.0
 uvloop==0.22.1
 vertexai==1.71.1
