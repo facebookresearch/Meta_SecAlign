@@ -1,0 +1,16 @@
+__pycache__
+wandb
+meta-llama*
+*-log
+.cache
+figures
+*gcg*
+data
+Qwen
+dpo_qwen4_instruct.py
+findclose.py
+findclose_qwen.py
+run_tests_noih.py
+test_lm_eval_qwen.py
+longbench*
+lora_dpo_distributed.py

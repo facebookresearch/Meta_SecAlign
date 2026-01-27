@@ -1,0 +1,3 @@
+[submodule "agentdojo"]
+	path = agentdojo
+	url = https://github.com/ethz-spylab/agentdojo.git
