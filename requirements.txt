@@ -26,7 +26,7 @@ colorama==0.4.6
 compressed-tensors==0.11.0
 contextlib2==21.6.0
 contourpy==1.3.3
-cryptography==45.0.4
+cryptography==46.0.5
 cupy-cuda12x==13.6.0
 cycler==0.12.1
 dataproperty==1.1.0
