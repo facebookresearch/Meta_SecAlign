@@ -562,7 +562,6 @@ if __name__ == "__main__":
     else:
         print(dataset_out_name, 'already exists.')
 
-    
     # Process SEP dataset
     dataset_out_name = 'data/SEP_dataset_test.json'
     dataset_out_name_ref = 'data/SEP_dataset_test_Meta-Llama-3-8B-Instruct.json'
@@ -585,10 +584,12 @@ if __name__ == "__main__":
         model, _ = load_vllm_model('meta-llama/Meta-Llama-3-8B-Instruct')
         llm_input = form_llm_input(data_sft_format, none, tokenizer.apply_chat_template, instruction_hierarchy=True, defense='none')
         print(llm_input[0])
+        time.sleep(5)
         outputs = test_model_output_vllm(llm_input, model, tokenizer)
         
         data_reference = []
         for i, d in enumerate(data_sft_format):
+            while outputs[i].startswith(' '): outputs[i] = outputs[i][1:]
             data_reference.append({
                 'instruction': d['instruction'] + '\n\n' + d['input'],
                 'input': d['input'],
