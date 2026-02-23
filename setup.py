@@ -204,52 +204,6 @@ if __name__ == "__main__":
     else:
         print(dataset_out_name, 'already exists.')
 
-    
-    # Process SEP dataset
-    dataset_out_name = 'data/SEP_dataset_test.json'
-    data = jload('data/SEP_dataset.json')
-    data_sft_format = []
-    for d in data:
-        instruction = d['system_prompt_clean']
-        input = d['prompt_clean']
-        injection = d['prompt_instructed'].replace(d['prompt_clean'], '')
-        if injection.startswith(' ') or injection.startswith('\n'): injection = injection[1:]
-        data_sft_format.append({
-            'instruction': instruction,
-            'input': input,
-            'injection': injection,
-            'witness': d['witness']
-        })
-    if not os.path.exists(dataset_out_name):
-        jdump(data_sft_format, dataset_out_name)
-    else:
-        print(dataset_out_name, 'already exists.')
-
-
-    # Generate SEP reference responses for evaluation
-    time.sleep(3)
-    dataset_out_name = 'data/SEP_dataset_test_Meta-Llama-3-8B-Instruct.json'
-    if not os.path.exists(dataset_out_name) and torch.cuda.device_count():
-        model, _ = load_vllm_model('meta-llama/Meta-Llama-3-8B-Instruct')
-        llm_input = form_llm_input(data_sft_format, none, tokenizer.apply_chat_template, instruction_hierarchy=True, defense='none')
-        print(llm_input[0])
-        outputs = test_model_output_vllm(llm_input, model, tokenizer)
-        data_reference = []
-        for i, d in enumerate(data_sft_format):
-            data_reference.append({
-                'instruction': d['instruction'] + '\n\n' + d['input'],
-                'input': d['input'],
-                'output': outputs[i],
-                'witness': d['witness'],
-                'injection': d['injection'],
-                'instruction_only': d['instruction'],
-                "generator": "meta-llama/Meta-Llama-3-8B-Instruct",
-            })
-        jdump(data_reference, dataset_out_name)
-    else:
-        if torch.cuda.device_count(): print(dataset_out_name, 'already exists.')
-        else: print('Skipping SEP reference response generation for SEP Utility evaluation due to no available GPUs.')
-
 
     # Process TaskTracker dataset following https://github.com/microsoft/TaskTracker/blob/main/task_tracker/dataset_creation/prepare_datasets_poisoned_test.ipynb
     dataset_out_name = 'data/TaskTracker_dataset_test.json'
@@ -607,3 +561,45 @@ if __name__ == "__main__":
 
     else:
         print(dataset_out_name, 'already exists.')
+
+    
+    # Process SEP dataset
+    dataset_out_name = 'data/SEP_dataset_test.json'
+    dataset_out_name_ref = 'data/SEP_dataset_test_Meta-Llama-3-8B-Instruct.json'
+    if not (os.path.exists(dataset_out_name_ref) and os.path.exists(dataset_out_name)):
+        assert torch.cuda.device_count() > 0, "GPU is required to process the SEP dataset and generate reference responses for evaluation. Please ensure that a compatible GPU is available and properly configured."
+        data = jload('data/SEP_dataset.json')
+        data_sft_format = []
+        for d in data:
+            instruction = d['system_prompt_clean']
+            input = d['prompt_clean']
+            injection = d['prompt_instructed'].replace(d['prompt_clean'], '')
+            if injection.startswith(' ') or injection.startswith('\n'): injection = injection[1:]
+            data_sft_format.append({
+                'instruction': instruction,
+                'input': input,
+                'injection': injection,
+                'witness': d['witness']
+            })
+    
+        model, _ = load_vllm_model('meta-llama/Meta-Llama-3-8B-Instruct')
+        llm_input = form_llm_input(data_sft_format, none, tokenizer.apply_chat_template, instruction_hierarchy=True, defense='none')
+        print(llm_input[0])
+        outputs = test_model_output_vllm(llm_input, model, tokenizer)
+        
+        data_reference = []
+        for i, d in enumerate(data_sft_format):
+            data_reference.append({
+                'instruction': d['instruction'] + '\n\n' + d['input'],
+                'input': d['input'],
+                'output': outputs[i],
+                'witness': d['witness'],
+                'injection': d['injection'],
+                'instruction_only': d['instruction'],
+                "generator": "meta-llama/Meta-Llama-3-8B-Instruct",
+            })
+            data_sft_format[i]['output'] = outputs[i]
+        jdump(data_reference, dataset_out_name_ref)
+        jdump(data_sft_format, dataset_out_name)
+    else:
+        print(dataset_out_name, 'already exists.', dataset_out_name_ref, 'already exists.')
