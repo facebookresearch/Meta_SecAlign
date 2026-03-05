@@ -260,7 +260,7 @@ websockets==15.0.1
 wget==3.2
 word2number==1.1
 xformers==0.0.32.post1
-xgrammar==0.1.25
+xgrammar==0.1.32
 xxhash==3.6.0
 yarl==1.22.0
 zstandard==0.25.0
