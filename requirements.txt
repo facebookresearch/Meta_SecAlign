@@ -174,7 +174,7 @@ pycryptodomex==3.23.0
 pydantic==2.12.3
 pydantic-core==2.41.4
 pydantic-extra-types==2.10.6
-pygments==2.19.2
+pygments==2.20.0
 pyparsing==3.2.5
 pytablewriter==1.2.1
 pytest==8.3.4
