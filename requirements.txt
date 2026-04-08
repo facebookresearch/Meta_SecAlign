@@ -236,7 +236,7 @@ torchmetrics==1.8.2
 torchvision==0.23.0
 tqdm==4.66.5
 tqdm-multiprocess==0.0.11
-transformers==4.57.1
+transformers==5.0.0rc3
 triton==3.4.0
 trl==0.22.1
 typeguard==2.13.3
