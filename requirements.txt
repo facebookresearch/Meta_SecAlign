@@ -187,7 +187,7 @@ pytorch-ranger==0.1.1
 pytz==2025.2
 pyyaml==6.0.3
 pyzmq==27.1.0
-ray==2.50.1
+ray==2.55.0
 referencing==0.37.0
 regex==2025.10.23
 requests==2.32.5
