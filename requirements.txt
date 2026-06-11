@@ -227,7 +227,7 @@ termcolor==3.2.0
 threadpoolctl==3.6.0
 tiktoken==0.12.0
 tokenizers==0.22.1
-torch==2.8.0
+torch==2.12.0
 torch-optimizer==0.3.0
 torchao==0.11.0
 torchaudio==2.8.0
